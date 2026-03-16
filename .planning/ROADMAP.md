@@ -19,7 +19,7 @@
 **Plans:** 1 plan
 
 Plans:
-- [ ] 01-roster-data-01-PLAN.md — Convert CSV to roster.json, add draft_score_base, validate output
+- [x] 01-roster-data-01-PLAN.md — Convert CSV to roster.json, add draft_score_base, validate output
 
 **Success criteria:**
 - All 101 superstars present with correct field names
@@ -161,7 +161,7 @@ Plans:
 
 | Phase | Name | Requirements | Status |
 |-------|------|-------------|--------|
-| 1 | Roster Data | DATA-01/02/03 | Pending |
+| 1 | Roster Data | DATA-01/02/03 | Complete |
 | 2 | Match Rating Formula | FORM-01/02/03 | Pending |
 | 3 | Wireframe: Screen 6 | WIRE-06 | Pending |
 | 4 | Wireframes: Screens 7–10 | WIRE-07/08/09/10 | Pending |

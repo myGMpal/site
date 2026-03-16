@@ -11,9 +11,9 @@ These are the Claude-deliverable artifacts for the v1.0 launch milestone.
 
 ### Data
 
-- [ ] **DATA-01**: `data/roster.json` exports all 101 superstars with correct field names matching the Thunkable data model (Name, OVR, Gender, Category, Brand, Class, Role, Ring_Level, Popularity, Promo_Skill, Draft_Cost, Is_Legend, Stamina, Morale)
-- [ ] **DATA-02**: Roster JSON is validated — no missing required fields, all values within expected ranges
-- [ ] **DATA-03**: Draft Score is pre-calculated for each superstar using the confirmed formula: `(Popularity × 0.35) + (OVR × 0.25) + (Mic × 4 × 0.2)` with a +40% role balance bonus flag included
+- [x] **DATA-01**: `data/roster.json` exports all 101 superstars with correct field names matching the Thunkable data model (Name, OVR, Gender, Category, Brand, Class, Role, Ring_Level, Popularity, Promo_Skill, Draft_Cost, Is_Legend, Stamina, Morale, draft_score_base)
+- [x] **DATA-02**: Roster JSON is validated — no missing required fields, all values within expected ranges
+- [x] **DATA-03**: Draft Score is pre-calculated for each superstar as `draft_score_base` using the confirmed formula: `round((Popularity × 0.35) + (OVR × 0.25) + (Promo_Skill × 4 × 0.20), 1)`. The +40% role balance bonus is dynamic and NOT pre-calculated — it is applied in-app based on current draft state.
 
 ### Formula
 
@@ -90,9 +90,9 @@ Post-launch. Not in current roadmap.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DATA-01 | Phase 1 | Pending |
-| DATA-02 | Phase 1 | Pending |
-| DATA-03 | Phase 1 | Pending |
+| DATA-01 | Phase 1 | Complete |
+| DATA-02 | Phase 1 | Complete |
+| DATA-03 | Phase 1 | Complete |
 | FORM-01 | Phase 2 | Pending |
 | FORM-02 | Phase 2 | Pending |
 | FORM-03 | Phase 2 | Pending |
@@ -121,4 +121,4 @@ Post-launch. Not in current roadmap.
 
 ---
 *Requirements defined: 2026-03-16*
-*Last updated: 2026-03-16 — initial definition*
+*Last updated: 2026-03-16 — Phase 1 complete: DATA-01/02/03 done, draft_score_base added to DATA-01, DATA-03 formula corrected*
