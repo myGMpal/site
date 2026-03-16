@@ -34,7 +34,7 @@
 | 3b | Choose Your GM | ✅ Locked | screen-03b-gm.html | 21 GMs with power card info |
 | 4 | Draft Board | ✅ Locked | screen-04-draft.html | Turn-based, 3 tabs, filter, modal, order dots |
 | 5 | Champion Selection | ✅ Locked | screen-05-champions.html | Auto-suggest, picker modal, vacant option |
-| 6 | Initial Booking | ⏳ Pending | — | Week 1 show template, rivalry suggestions |
+| 6 | Initial Booking | 🚧 Draft (v4) | screen-06-booking-v4.html | In progress — see Screen 6 notes below |
 
 ### MAIN APP (Screens 7–13)
 
@@ -220,17 +220,49 @@ Adam Pearce, Nick Aldis, Shawn Michaels, Ava, Stephanie McMahon, Paul Heyman, Wi
 
 ---
 
-## Remaining Screens To Build (Session 2)
+## Screen 6 — Initial Booking (DRAFT — needs more work)
 
-**Next session pick up at Screen 6 — Initial Booking:**
-- Suggested Week 1 rivalries based on drafted roster
-- Predicted match ratings
-- First show template (opening / mid-card / main event)
-- Accept / Review / Change rivalry suggestions
+**Current state:** v4 draft, not locked
+**File:** `wireframes/screen-06-booking-v4.html`
 
-**Then continue through Screens 7–13 in order.**
+### What is built ✅
+- Constraints section (collapsible): Commissioner Goals, Active Promises, Roster Availability
+- Show card: Opener → Mid-Card → Mid-Card → Main Event (correct order)
+- Promo cards: 8 types with cost badge + effect description — live-updating
+- Match type panel inline below each match card:
+  - 27 match types fully loaded with cost tier, stamina bar (colour-coded), special effects note
+  - Stipulation dropdown (1v1, 3-Way, 4-Way etc. — 2-Way removed)
+  - Modifiers: Title / Run-In / GM Interference toggles
+  - Intergender: automatic detection, not a toggle — fires when mixed genders selected, bumps cost + stamina, shows ⚡ indicator
+- Match cost badge on card header — updates live with match type
+- Show Cost Summary + Confirm Card button
+
+### What still needs work ⏳
+- Match costs need actual $ values where known ($55,000 for 3 Stages of Hell is only confirmed number — more data needed from Adam)
+- Stipulation dropdowns should be context-aware (e.g. Steel Cage = 1v1 only, Battle Royal = multi-person only)
+- Double booking detection — same superstar in match AND promo → warning + -6 stamina penalty
+- PLE-exclusive flag — Elimination Chamber only bookable at PLE week
+- Match cost scaling formula — costs scale with OVR, Popularity, Stamina, match type complexity
+- Go-Home show vs Weekly show visual distinction
+- Additional match type data pending
+
+---
+
+## Remaining Screens To Build
+
+| # | Screen | Next action |
+|---|--------|-------------|
+| 6 | Initial Booking | 🚧 Continue — see notes above |
+| 7 | Home Hub | Week tracker, alerts, quick stats |
+| 8 | Roster Page | XP milestones, stamina, morale, perk alerts |
+| 9 | Match Calculator | Predict star ratings, breakdown |
+| 10 | Rivalry Planner | Heat level, stale warnings, escalation |
+| 11 | Scouting | Gap analysis, free agents, search criteria |
+| 12 | Post-Show Feedback | Star rating input, stat updates, chemistry log |
+| 13 | Settings | Toggles, preferences, legal |
 
 ---
 
 *Wireframes document — maintained alongside myGMPal_Master_Plan.md*
 *v1.0 — 15 March 2026 — Screens 1–5 locked*
+*v1.1 — 16 March 2026 — Screen 2 v2 (AI Difficulty restored), Screen 6 v4 draft. Match types, promo types, intergender auto-detection, match cost badges all built. Screen 6 pending further data before lock.*

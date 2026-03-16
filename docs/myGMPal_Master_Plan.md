@@ -963,7 +963,8 @@ The following items are still to be produced:
 | 5 | ~~mygmpal.com homepage~~ | ✅ Done — live at mygmpal.com |
 | 6 | **Match rating formula — full breakdown** | ⏳ Next |
 | 7 | App screen wireframes — onboarding flow | ✅ Done — Screens 1–5 locked (see myGMPal_Wireframes.md) |
-| 8 | App screen wireframes — main app screens 6–13 | ⏳ Pending — pick up next session at Screen 6 |
+| 8 | App screen wireframes — Screen 6 Initial Booking | 🚧 Draft v4 — needs match cost data + stipulation context-awareness before lock |
+| 9 | App screen wireframes — main app screens 7–13 | ⏳ Pending — after Screen 6 locked |
 | 9 | App Store listing copy — descriptions for both Google Play and App Store | ⏳ Pending |
 | 10 | Ko-fi page setup guide + suggested content | ⏳ Pending |
 
