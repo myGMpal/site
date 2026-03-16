@@ -12,7 +12,9 @@ See: `.planning/PROJECT.md` (updated 2026-03-16)
 
 ## Current Phase
 
-**None started.** Run `/gsd:plan-phase 1` to begin.
+**Phase 1 — Roster Data: COMPLETE**
+- Plan 01: Convert CSV to roster.json — DONE (2026-03-16)
+- Stopped at: Completed 01-roster-data-01-PLAN.md
 
 ---
 
@@ -20,7 +22,7 @@ See: `.planning/PROJECT.md` (updated 2026-03-16)
 
 | Phase | Name | Status |
 |-------|------|--------|
-| 1 | Roster Data | ⏳ Pending |
+| 1 | Roster Data | ✅ Complete |
 | 2 | Match Rating Formula | ⏳ Pending |
 | 3 | Wireframe: Screen 6 | ⏳ Pending |
 | 4 | Wireframes: Screens 7–10 | ⏳ Pending |
@@ -35,10 +37,27 @@ See: `.planning/PROJECT.md` (updated 2026-03-16)
 
 - Wireframes 1–5 are locked HTML files. Check `docs/myGMPal_Wireframes.md` for design decisions before touching any wireframe.
 - Design system: `#0a0a0a` bg, `#d0021b` red accent, `#ffffff` text. All button styles HARDCODED INLINE. No CSS classes.
-- Roster data lives in Google Sheets (101 superstars). `data/roster.json` needs to be created from that data.
-- The `wireframes/` and `data/` and `scripts/` directories don't exist yet — create them in Phase 1/2.
+- `data/roster.json` exists — 101 superstars, 16 fields each, validated with zero issues.
+- `data/` and `scripts/` directories exist. `wireframes/` directory still needs to be created (Phase 3).
 - Website deploys automatically: push to main → GitHub Actions → live at mygmpal.com in ~60 seconds.
 - Legal: never use "WWE", "2K", "myGM" as brand identifiers in app store copy.
 
 ---
+
+## Decisions
+
+- **Phase 1:** `draft_score_base` formula locked: `round((pop*0.35)+(ovr*0.25)+(promo*4*0.20), 1)` — role balance bonus is dynamic, NOT pre-calculated
+- **Phase 1:** `Is_Legend` stored as boolean in JSON (not string "TRUE"/"FALSE")
+- **Phase 1:** `Data_Source` column included in JSON — documents confirmed vs estimated values
+
+---
+
+## Performance Metrics
+
+| Phase | Plan | Duration | Tasks | Files |
+|-------|------|----------|-------|-------|
+| 01-roster-data | 01 | ~15 min | 2/2 | 4 |
+
+---
 *State initialized: 2026-03-16*
+*Last session: 2026-03-16 — Completed 01-roster-data-01-PLAN.md*
