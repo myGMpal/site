@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Screen 6 — Initial Booking</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#1a1a1a; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; min-height:100vh; padding:24px 0; font-family:'Barlow Condensed',sans-serif; }
+.screen-label { font-size:11px; letter-spacing:3px; text-transform:uppercase; color:#888; margin-bottom:12px; }
+.phone { width:390px; background:#0a0a0a; border-radius:48px; border:3px solid #2a2a2a; overflow:hidden; box-shadow:0 0 0 1px #111, 0 32px 80px rgba(0,0,0,0.8), inset 0 0 0 1px rgba(255,255,255,0.05); position:relative; }
+.sbar { height:44px; background:#0a0a0a; display:flex; align-items:center; justify-content:space-between; padding:0 24px; flex-shrink:0; }
+.main-screen { display:flex; flex-direction:column; height:780px; background:#0a0a0a; overflow:hidden; }
+.hdr { padding:12px 24px 10px; display:flex; align-items:center; justify-content:space-between; border-bottom:0.5px solid rgba(255,255,255,0.08); flex-shrink:0; }
+.area { flex:1; overflow-y:auto; scrollbar-width:none; }
+.area::-webkit-scrollbar { display:none; }
+.sec-head { font-size:10px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:rgba(255,255,255,0.3); }
+.div { height:0.5px; background:rgba(255,255,255,0.07); margin:12px 0; }
+.pill { display:inline-flex; align-items:center; padding:3px 9px; border-radius:20px; font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase; }
+.pill-face { background:rgba(77,255,136,0.15); color:#4dff88; }
+.pill-heel { background:rgba(255,77,77,0.15); color:#ff4d4d; }
+.pill-weekly { background:rgba(255,255,255,0.08); color:rgba(255,255,255,0.5); }
+.pill-ple { background:rgba(208,2,27,0.2); color:#ff6666; }
+.asel { background:#1e1e1e; border:0.5px solid rgba(255,255,255,0.14); border-radius:8px; padding:9px 12px; color:#fff; font-size:13px; font-family:'Barlow Condensed',sans-serif; -webkit-appearance:none; width:100%; }
+/* Collapsible constraints section */
+.constraints-hdr { padding:12px 20px; background:#111; border-bottom:0.5px solid rgba(255,255,255,0.07); display:flex; align-items:center; justify-content:space-between; cursor:pointer; flex-shrink:0; }
+.constraints-body { background:#0d0d0d; border-bottom:0.5px solid rgba(255,255,255,0.07); overflow:hidden; transition:max-height 0.3s ease; }
+.sub-sec { padding:12px 20px; border-bottom:0.5px solid rgba(255,255,255,0.05); }
+.sub-sec:last-child { border-bottom:none; }
+.sub-sec-title { font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.35); margin-bottom:10px; }
+/* Match cards */
+.match-card { margin:0 20px 10px; background:#1a1a1a; border-radius:12px; border:0.5px solid rgba(255,255,255,0.07); overflow:hidden; }
+.match-card-head { padding:8px 14px; background:#161616; border-bottom:0.5px solid rgba(255,255,255,0.06); display:flex; align-items:center; justify-content:space-between; }
+.match-card-body { padding:12px 14px; }
+.match-card.editing { border-color:rgba(208,2,27,0.4); }
+.match-card.editing .match-card-head { background:rgba(208,2,27,0.08); }
+/* Superstar row inside match */
+.s-row { display:flex; align-items:center; gap:8px; padding:6px 0; }
+.s-row + .s-row { border-top:0.5px solid rgba(255,255,255,0.05); }
+.s-avatar { width:30px; height:30px; border-radius:50%; background:#2a2a2a; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:rgba(255,255,255,0.5); flex-shrink:0; }
+.vs-badge { width:20px; text-align:center; font-size:10px; font-weight:700; color:rgba(255,255,255,0.2); flex-shrink:0; }
+/* Promo slot */
+.promo-slot { margin:0 20px 10px; background:#141414; border-radius:10px; border:0.5px solid rgba(255,255,255,0.05); padding:10px 14px; display:flex; align-items:center; gap:10px; }
+/* Star rating */
+.stars { color:#d0021b; font-size:15px; letter-spacing:1px; }
+/* Promise chip */
+.promise-chip { display:inline-flex; align-items:center; gap:6px; background:#1e1e1e; border:0.5px solid rgba(255,255,255,0.1); border-radius:20px; padding:5px 10px 5px 12px; margin:3px; }
+/* Modal overlay */
+.modal-overlay { display:none; position:absolute; inset:0; background:rgba(0,0,0,0.85); z-index:50; align-items:flex-end; }
+.modal-overlay.open { display:flex; }
+.modal-sheet { background:#161616; border-radius:20px 20px 0 0; width:100%; padding:20px; border-top:0.5px solid rgba(255,255,255,0.1); max-height:85%; overflow-y:auto; }
+.modal-handle { width:40px; height:4px; background:rgba(255,255,255,0.2); border-radius:2px; margin:0 auto 16px; }
+/* Picker list */
+.picker-item { display:flex; align-items:center; gap:10px; padding:11px 12px; background:#1e1e1e; border-radius:10px; margin-bottom:6px; cursor:pointer; border:0.5px solid rgba(255,255,255,0.06); }
+.picker-item:hover { border-color:rgba(208,2,27,0.4); background:rgba(208,2,27,0.06); }
+.picker-item.selected { border-color:#d0021b; background:rgba(208,2,27,0.1); }
+</style>
+</head>
+<body>
+<div class="screen-label">Screen 6 — Initial Booking (Week 1)</div>
+<div class="phone">
+  <div class="sbar">
+    <span style="font-size:13px;font-weight:600;color:#fff;">9:41</span>
+    <span style="font-size:11px;color:#fff;">●●● WiFi 100%</span>
+  </div>
+
+  <div class="main-screen">
+    <!-- Header -->
+    <div class="hdr">
+      <span style="font-size:13px;color:#d0021b;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:600;">‹ Titles</span>
+      <span style="font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:3px;color:#fff;">Week 1 Booking</span>
+      <div style="display:flex;gap:6px;align-items:center;">
+        <span class="pill pill-weekly">RAW</span>
+        <span class="pill pill-weekly">WEEKLY</span>
+      </div>
+    </div>
+
+    <div class="area" id="mainArea">
+
+      <!-- ══ SECTION 1: CONSTRAINTS (collapsible) ══ -->
+      <div class="constraints-hdr" onclick="toggleConstraints()" id="constraintsHdr">
+        <div>
+          <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);">Constraints</div>
+          <div id="constraintsSummary" style="font-size:12px;color:rgba(255,255,255,0.6);margin-top:2px;">1 goal active · 1 promise · 0 unavailable</div>
+        </div>
+        <div id="chevron" style="font-size:18px;color:rgba(255,255,255,0.3);transition:transform 0.3s;">▼</div>
+      </div>
+
+      <div class="constraints-body" id="constraintsBody" style="max-height:600px;">
+
+        <!-- A: Commissioner Goals -->
+        <div class="sub-sec">
+          <div class="sub-sec-title">Commissioner Goal</div>
+          <div style="margin-bottom:8px;">
+            <select class="asel" id="goalType1" onchange="updateGoalPicker(1)">
+              <option value="none">No goals this week</option>
+              <option value="facevsheeel" selected>Book [Face] vs [Heel]</option>
+              <option value="dontuse">Don't use [Superstar] this week</option>
+              <option value="matchtype">Use [Match Type] once</option>
+              <option value="titlematch">Book a title match</option>
+              <option value="mainevent">Book [Superstar] in the main event</option>
+            </select>
+          </div>
+          <div id="goalPicker1" style="display:flex;gap:8px;">
+            <select class="asel" style="flex:1;">
+              <option>Superstar A (Face)</option>
+              <option>Superstar F (Face)</option>
+              <option>Legend X (Face)</option>
+            </select>
+            <select class="asel" style="flex:1;">
+              <option>Superstar B (Heel)</option>
+              <option>Superstar C (Heel)</option>
+              <option>Legend Y (Heel)</option>
+            </select>
+          </div>
+          <div id="addGoalRow" style="margin-top:8px;">
+            <span onclick="this.style.display='none';document.getElementById('goal2Row').style.display='block';"
+              style="font-size:12px;color:#d0021b;cursor:pointer;letter-spacing:1px;">+ Add second goal</span>
+          </div>
+          <div id="goal2Row" style="display:none;margin-top:8px;">
+            <select class="asel" style="margin-bottom:6px;">
+              <option value="none">No second goal</option>
+              <option value="matchtype">Use [Match Type] once</option>
+              <option value="titlematch">Book a title match</option>
+              <option value="mainevent">Book [Superstar] in the main event</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- B: Active Promises -->
+        <div class="sub-sec">
+          <div class="sub-sec-title">Active Promises</div>
+          <div id="promiseList" style="margin-bottom:8px;">
+            <!-- Pre-populated promise chip -->
+            <div class="promise-chip">
+              <div>
+                <div style="font-size:12px;font-weight:700;color:#fff;">Legend X</div>
+                <div style="font-size:10px;color:rgba(255,255,255,0.4);">Main event · Due Week 3</div>
+              </div>
+              <div onclick="this.closest('.promise-chip').remove();updateConstraintSummary();"
+                style="font-size:14px;color:rgba(255,255,255,0.3);cursor:pointer;margin-left:4px;">×</div>
+            </div>
+          </div>
+          <button onclick="openModal('promisePicker')"
+            onmouseover="this.style.background='rgba(208,2,27,0.15)';"
+            onmouseout="this.style.background='transparent';"
+            style="background:transparent;border:0.5px solid rgba(208,2,27,0.4);color:#d0021b;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;font-family:'Barlow Condensed',sans-serif;">
+            + Add Promise
+          </button>
+        </div>
+
+        <!-- C: Roster Availability -->
+        <div class="sub-sec">
+          <div class="sub-sec-title">Roster Availability</div>
+          <div id="unavailList" style="margin-bottom:8px;">
+            <!-- Empty state -->
+            <div id="noUnavail" style="font-size:12px;color:rgba(255,255,255,0.25);padding:4px 0;">All superstars available</div>
+          </div>
+          <button onclick="openModal('unavailPicker')"
+            onmouseover="this.style.background='rgba(255,255,255,0.08)';"
+            onmouseout="this.style.background='transparent';"
+            style="background:transparent;border:0.5px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.6);border-radius:8px;padding:7px 14px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;font-family:'Barlow Condensed',sans-serif;">
+            Mark Superstar Unavailable
+          </button>
+        </div>
+      </div>
+
+      <!-- ══ SECTION 2: SHOW CARD ══ -->
+      <div style="padding:14px 20px 8px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
+        <div>
+          <div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.3);">Show Card</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px;" id="slotCount">4 matches · 3 promos (Normal)</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:10px;color:rgba(255,255,255,0.3);">Week</div>
+          <div style="font-size:20px;font-weight:800;color:#fff;font-family:'Bebas Neue',sans-serif;line-height:1;">1</div>
+        </div>
+      </div>
+
+      <!-- ── MAIN EVENT ── -->
+      <div class="match-card" id="mc-main">
+        <div class="match-card-head">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#d0021b;">Main Event</span>
+            <span style="font-size:10px;color:rgba(255,255,255,0.3);">Title Match</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="stars">★★★★½</span>
+            <span style="font-size:9px;color:rgba(255,255,255,0.3);">predicted</span>
+          </div>
+        </div>
+        <div class="match-card-body">
+          <div class="s-row">
+            <div class="s-avatar">LX</div>
+            <div style="flex:1;">
+              <div style="font-size:13px;font-weight:700;color:#fff;">Legend X</div>
+              <div style="font-size:10px;color:rgba(255,255,255,0.4);">OVR 95</div>
+            </div>
+            <span class="pill pill-face">Face</span>
+            <button onclick="openModal('pickerMain',0)"
+              onmouseover="this.style.color='#d0021b';" onmouseout="this.style.color='rgba(255,255,255,0.3)';"
+              style="background:transparent;border:none;color:rgba(255,255,255,0.3);font-size:18px;cursor:pointer;">⇄</button>
+          </div>
+          <div style="padding:4px 0 4px 38px;font-size:10px;color:rgba(255,255,255,0.2);letter-spacing:1px;">VS</div>
+          <div class="s-row">
+            <div class="s-avatar">LY</div>
+            <div style="flex:1;">
+              <div style="font-size:13px;font-weight:700;color:#fff;">Legend Y</div>
+              <div style="font-size:10px;color:rgba(255,255,255,0.4);">OVR 93</div>
+            </div>
+            <span class="pill pill-heel">Heel</span>
+            <button onclick="openModal('pickerMain',1)"
+              onmouseover="this.style.color='#d0021b';" onmouseout="this.style.color='rgba(255,255,255,0.3)';"
+              style="background:transparent;border:none;color:rgba(255,255,255,0.3);font-size:18px;cursor:pointer;">⇄</button>
+          </div>
+        </div>
+        <!-- Constraint flag -->
+        <div style="padding:6px 14px 10px;display:flex;align-items:center;gap:6px;">
+          <span style="font-size:12px;">🎯</span>
+          <span style="font-size:11px;color:#4dff88;">Satisfies commissioner goal — Face vs Heel</span>
+        </div>
+      </div>
+
+      <!-- Main Event Promo -->
+      <div class="promo-slot">
+        <div style="padding:3px 8px;background:rgba(255,255,255,0.06);border-radius:4px;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);flex-shrink:0;">Promo</div>
+        <div style="flex:1;">
+          <div style="font-size:12px;font-weight:600;color:#fff;">Legend X</div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.4);">Title feud build</div>
+        </div>
+        <button onclick="openModal('promoPicker')"
+          onmouseover="this.style.color='#d0021b';" onmouseout="this.style.color='rgba(255,255,255,0.3)';"
+          style="background:transparent;border:none;color:rgba(255,255,255,0.3);font-size:18px;cursor:pointer;padding:4px;">⇄</button>
+      </div>
+
+      <!-- ── OPENER ── -->
+      <div class="match-card" style="margin-top:4px;">
+        <div class="match-card-head">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.5);">Opener</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="stars" style="font-size:13px;">★★★</span>
+            <span style="font-size:9px;color:rgba(255,255,255,0.3);">predicted</span>
+          </div>
+        </div>
+        <div class="match-card-body">
+          <div class="s-row">
+            <div class="s-avatar">SA</div>
+            <div style="flex:1;"><div style="font-size:13px;font-weight:700;color:#fff;">Superstar A</div><div style="font-size:10px;color:rgba(255,255,255,0.4);">OVR 92</div></div>
+            <span class="pill pill-face">Face</span>
+            <button onclick="openModal('pickerOpener',0)" onmouseover="this.style.color='#d0021b';" onmouseout="this.style.color='rgba(255,255,255,0.3)';" style="background:transparent;border:none;color:rgba(255,255,255,0.3);font-size:18px;cursor:pointer;">⇄</button>
+          </div>
+          <div style="padding:4px 0 4px 38px;font-size:10px;color:rgba(255,255,255,0.2);letter-spacing:1px;">VS</div>
+          <div class="s-row">
+            <div class="s-avatar">SC</div>
+            <div style="flex:1;"><div style="font-size:13px;font-weight:700;color:#fff;">Superstar C</div><div style="font-size:10px;color:rgba(255,255,255,0.4);">OVR 87</div></div>
+            <span class="pill pill-heel">Heel</span>
+            <button onclick="openModal('pickerOpener',1)" onmouseover="this.style.color='#d0021b';" onmouseout="this.style.color='rgba(255,255,255,0.3)';" style="background:transparent;border:none;color:rgba(255,255,255,0.3);font-size:18px;cursor:pointer;">⇄</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Opener Promo -->
+      <div class="promo-slot">
+        <div style="padding:3px 8px;background:rgba(255,255,255,0.06);border-radius:4px;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);flex-shrink:0;">Promo</div>
+        <div style="flex:1;"><div style="font-size:12px;font-weight:600;color:#fff;">Superstar C</div><div style="font-size:10px;color:rgba(255,255,255,0.4);">Heel promo — build rivalry</div></div>
+        <button onmouseover="this.style.color='#d0021b';" onmouseout="this.style.color='rgba(255,255,255,0.3)';" style="background:transparent;border:none;color:rgba(255,255,255,0.3);font-size:18px;cursor:pointer;padding:4px;">⇄</button>
+      </div>
+
+      <!-- ── MID-CARD 1 ── -->
+      <div class="match-card" style="margin-top:4px;">
+        <div class="match-card-head">
+          <span style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);">Mid-Card</span>
+          <div style="display:flex;align-items:center;gap:8px;"><span class="stars" style="font-size:13px;">★★½</span><span style="font-size:9px;color:rgba(255,255,255,0.3);">predicted</span></div>
+        </div>
+        <div class="match-card-body">
+          <div class="s-row">
+            <div class="s-avatar">SF</div>
+            <div style="flex:1;"><div style="font-size:13px;font-weight:700;color:#fff;">Superstar F</div><div style="font-size:10px;color:rgba(255,255,255,0.4);">OVR 83</div></div>
+            <span class="pill pill-face">Face</span>
+            <button onmouseover="this.style.color='#d0021b';" onmouseout="this.style.color='rgba(255,255,255,0.3)';" style="background:transparent;border:none;color:rgba(255,255,255,0.3);font-size:18px;cursor:pointer;">⇄</button>
+          </div>
+          <div style="padding:4px 0 4px 38px;font-size:10px;color:rgba(255,255,255,0.2);letter-spacing:1px;">VS</div>
+          <div class="s-row">
+            <div class="s-avatar">SE</div>
+            <div style="flex:1;"><div style="font-size:13px;font-weight:700;color:#fff;">Superstar E</div><div style="font-size:10px;color:rgba(255,255,255,0.4);">OVR 84</div></div>
+            <span class="pill pill-heel">Heel</span>
+            <button onmouseover="this.style.color='#d0021b';" onmouseout="this.style.color='rgba(255,255,255,0.3)';" style="background:transparent;border:none;color:rgba(255,255,255,0.3);font-size:18px;cursor:pointer;">⇄</button>
+          </div>
+        </div>
+        <!-- Warning flag -->
+        <div style="padding:6px 14px 10px;display:flex;align-items:center;gap:6px;">
+          <span style="font-size:12px;">⚠️</span>
+          <span style="font-size:11px;color:#ffcc44;">Superstar E has low morale — consider replacing</span>
+        </div>
+      </div>
+
+      <!-- Mid-Card 1 Promo -->
+      <div class="promo-slot">
+        <div style="padding:3px 8px;background:rgba(255,255,255,0.06);border-radius:4px;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);flex-shrink:0;">Promo</div>
+        <div style="flex:1;"><div style="font-size:12px;font-weight:600;color:#fff;">Superstar F</div><div style="font-size:10px;color:rgba(255,255,255,0.4);">High mic skill — crowd pop</div></div>
+        <button onmouseover="this.style.color='#d0021b';" onmouseout="this.style.color='rgba(255,255,255,0.3)';" style="background:transparent;border:none;color:rgba(255,255,255,0.3);font-size:18px;cursor:pointer;padding:4px;">⇄</button>
+      </div>
+
+      <!-- ── MID-CARD 2 ── -->
+      <div class="match-card" style="margin-top:4px;">
+        <div class="match-card-head">
+          <span style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);">Mid-Card</span>
+          <div style="display:flex;align-items:center;gap:8px;"><span class="stars" style="font-size:13px;">★★</span><span style="font-size:9px;color:rgba(255,255,255,0.3);">predicted</span></div>
+        </div>
+        <div class="match-card-body">
+          <div class="s-row">
+            <div class="s-avatar">SD</div>
+            <div style="flex:1;"><div style="font-size:13px;font-weight:700;color:#fff;">Superstar D</div><div style="font-size:10px;color:rgba(255,255,255,0.4);">OVR 85 · Women's Division</div></div>
+            <span class="pill pill-face">Face</span>
+            <button onmouseover="this.style.color='#d0021b';" onmouseout="this.style.color='rgba(255,255,255,0.3)';" style="background:transparent;border:none;color:rgba(255,255,255,0.3);font-size:18px;cursor:pointer;">⇄</button>
+          </div>
+          <div style="padding:4px 0 4px 38px;font-size:10px;color:rgba(255,255,255,0.2);letter-spacing:1px;">VS</div>
+          <div class="s-row">
+            <div class="s-avatar">SG</div>
+            <div style="flex:1;"><div style="font-size:13px;font-weight:700;color:#fff;">Superstar G</div><div style="font-size:10px;color:rgba(255,255,255,0.4);">OVR 82 · Women's Division</div></div>
+            <span class="pill pill-heel">Heel</span>
+            <button onmouseover="this.style.color='#d0021b';" onmouseout="this.style.color='rgba(255,255,255,0.3)';" style="background:transparent;border:none;color:rgba(255,255,255,0.3);font-size:18px;cursor:pointer;">⇄</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ SECTION 3: CONFIRM ══ -->
+      <div style="padding:20px 20px 28px;">
+        <button
+          onmouseover="this.style.background='#d0021b';this.style.color='#fff';this.style.borderColor='#d0021b';"
+          onmouseout="this.style.background='#ffffff';this.style.color='#111111';this.style.borderColor='#ffffff';"
+          style="display:block;width:100%;padding:15px;border-radius:10px;border:2px solid #ffffff;background:#ffffff;color:#111111;font-size:14px;font-weight:700;letter-spacing:3px;text-transform:uppercase;cursor:pointer;margin-bottom:12px;font-family:'Barlow Condensed',sans-serif;">
+          Confirm Card →
+        </button>
+        <div style="text-align:center;">
+          <span onclick="resetSuggestions()"
+            style="font-size:12px;color:rgba(255,255,255,0.35);cursor:pointer;letter-spacing:1px;text-decoration:underline;">
+            Reset Suggestions
+          </span>
+        </div>
+        <!-- Algorithm footnote -->
+        <div style="margin-top:14px;background:#111;border-radius:8px;padding:10px 14px;">
+          <div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.25);margin-bottom:4px;">Suggestion Logic</div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.3);line-height:1.6;">Score = Class Synergy + Role Matchup + OVR proximity. Unavailable superstars excluded. Constraint-satisfying pairs ranked higher.</div>
+        </div>
+      </div>
+
+    </div><!-- end .area -->
+
+    <!-- Persistent bottom bar -->
+    <div style="padding:10px 20px 14px;background:#0a0a0a;border-top:0.5px solid rgba(255,255,255,0.08);flex-shrink:0;display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3);">Season</div>
+        <div style="font-size:12px;font-weight:600;color:#fff;">RAW Season 1</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3);">Budget</div>
+        <div style="font-size:14px;font-weight:800;color:#d0021b;font-family:'Barlow Condensed',sans-serif;">$5,540,000</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ MODAL: Promise Picker ══ -->
+  <div class="modal-overlay" id="modal-promisePicker" onclick="closeModalBg(event,'promisePicker')">
+    <div class="modal-sheet" onclick="event.stopPropagation()">
+      <div class="modal-handle"></div>
+      <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:4px;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;">Add Promise</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:14px;">Select a superstar and promise type</div>
+
+      <div style="margin-bottom:12px;">
+        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:6px;">Superstar</div>
+        <select class="asel" id="promiseSuperstar">
+          <option>Legend X</option><option>Superstar A</option><option>Superstar B</option>
+          <option>Superstar D</option><option>Superstar F</option><option>Superstar H</option>
+        </select>
+      </div>
+      <div style="margin-bottom:16px;">
+        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:6px;">Promise Type</div>
+        <select class="asel" id="promiseType">
+          <optgroup label="Match Card">
+            <option>Main event appearance</option>
+            <option>Match on show</option>
+            <option>PPV/PLE match</option>
+          </optgroup>
+          <optgroup label="Title">
+            <option>Title match soon</option>
+            <option>Specific division</option>
+            <option>Defend/challenge at PLE</option>
+          </optgroup>
+          <optgroup label="Opponent">
+            <option>Face specific rival</option>
+            <option>Team with superstar</option>
+            <option>Stay away from opponent</option>
+          </optgroup>
+          <optgroup label="Workload">
+            <option>Time off this week</option>
+            <option>Avoid brutal match types</option>
+            <option>Skip if unhappy</option>
+          </optgroup>
+        </select>
+      </div>
+      <div style="margin-bottom:16px;">
+        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:6px;">Deadline</div>
+        <select class="asel">
+          <option>1 Week</option><option>2 Weeks</option><option selected>3 Weeks</option>
+          <option>4 Weeks</option><option>Next PLE</option>
+        </select>
+      </div>
+      <button onclick="addPromise()"
+        onmouseover="this.style.background='#d0021b';this.style.color='#fff';this.style.borderColor='#d0021b';"
+        onmouseout="this.style.background='#ffffff';this.style.color='#111';this.style.borderColor='#ffffff';"
+        style="display:block;width:100%;padding:13px;border-radius:10px;border:2px solid #ffffff;background:#ffffff;color:#111;font-size:14px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:'Barlow Condensed',sans-serif;">
+        Add Promise
+      </button>
+    </div>
+  </div>
+
+  <!-- ══ MODAL: Unavailability Picker ══ -->
+  <div class="modal-overlay" id="modal-unavailPicker" onclick="closeModalBg(event,'unavailPicker')">
+    <div class="modal-sheet" onclick="event.stopPropagation()">
+      <div class="modal-handle"></div>
+      <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:4px;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;">Mark Unavailable</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:14px;">Select superstar and reason</div>
+
+      <div style="margin-bottom:12px;">
+        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:6px;">Superstar</div>
+        <select class="asel" id="unavailSuperstar">
+          <option>Superstar B</option><option>Superstar C</option><option>Superstar E</option>
+          <option>Superstar H</option><option>Superstar J</option>
+        </select>
+      </div>
+      <div style="margin-bottom:12px;">
+        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:6px;">Reason</div>
+        <select class="asel">
+          <option>Injured</option><option>Personal Leave</option><option>Suspended</option>
+        </select>
+      </div>
+      <div style="margin-bottom:16px;">
+        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:6px;">Duration (weeks)</div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <button onclick="adjDur(-1)" style="width:40px;height:40px;background:#1e1e1e;border:0.5px solid rgba(255,255,255,0.2);border-radius:8px;color:#fff;font-size:20px;cursor:pointer;">−</button>
+          <div id="durVal" style="flex:1;background:#1e1e1e;border:0.5px solid rgba(255,255,255,0.14);border-radius:8px;padding:9px;color:#d0021b;font-size:16px;font-weight:700;text-align:center;font-family:'Barlow Condensed',sans-serif;">2</div>
+          <button onclick="adjDur(1)" style="width:40px;height:40px;background:#1e1e1e;border:0.5px solid rgba(255,255,255,0.2);border-radius:8px;color:#fff;font-size:20px;cursor:pointer;">+</button>
+        </div>
+      </div>
+      <button onclick="addUnavail()"
+        onmouseover="this.style.background='#d0021b';this.style.color='#fff';this.style.borderColor='#d0021b';"
+        onmouseout="this.style.background='#ffffff';this.style.color='#111';this.style.borderColor='#ffffff';"
+        style="display:block;width:100%;padding:13px;border-radius:10px;border:2px solid #ffffff;background:#ffffff;color:#111;font-size:14px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:'Barlow Condensed',sans-serif;">
+        Confirm
+      </button>
+    </div>
+  </div>
+
+  <!-- ══ MODAL: Superstar Picker (for match swap) ══ -->
+  <div class="modal-overlay" id="modal-pickerMain" onclick="closeModalBg(event,'pickerMain')">
+    <div class="modal-sheet" onclick="event.stopPropagation()">
+      <div class="modal-handle"></div>
+      <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:4px;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;">Replace Superstar</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:14px;">Select from available roster</div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <div class="picker-item" onclick="this.classList.toggle('selected')">
+          <div style="width:32px;height:32px;border-radius:50%;background:#2a2a2a;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:rgba(255,255,255,0.5);flex-shrink:0;">SA</div>
+          <div style="flex:1;"><div style="font-size:13px;font-weight:600;color:#fff;">Superstar A</div><div style="font-size:10px;color:rgba(255,255,255,0.4);">Face · Fighter · OVR 92</div></div>
+          <span class="pill pill-face">Face</span>
+        </div>
+        <div class="picker-item" onclick="this.classList.toggle('selected')">
+          <div style="width:32px;height:32px;border-radius:50%;background:#2a2a2a;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:rgba(255,255,255,0.5);flex-shrink:0;">SF</div>
+          <div style="flex:1;"><div style="font-size:13px;font-weight:600;color:#fff;">Superstar F</div><div style="font-size:10px;color:rgba(255,255,255,0.4);">Face · Cruiser · OVR 83</div></div>
+          <span class="pill pill-face">Face</span>
+        </div>
+        <div class="picker-item" onclick="this.classList.toggle('selected')">
+          <div style="width:32px;height:32px;border-radius:50%;background:#2a2a2a;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:rgba(255,255,255,0.5);flex-shrink:0;">SB</div>
+          <div style="flex:1;"><div style="font-size:13px;font-weight:600;color:#fff;">Superstar B</div><div style="font-size:10px;color:rgba(255,255,255,0.4);">Heel · Giant · OVR 89</div></div>
+          <span class="pill pill-heel">Heel</span>
+        </div>
+        <div class="picker-item" onclick="this.classList.toggle('selected')">
+          <div style="width:32px;height:32px;border-radius:50%;background:#2a2a2a;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:rgba(255,255,255,0.5);flex-shrink:0;">SC</div>
+          <div style="flex:1;"><div style="font-size:13px;font-weight:600;color:#fff;">Superstar C</div><div style="font-size:10px;color:rgba(255,255,255,0.4);">Heel · Bruiser · OVR 87</div></div>
+          <span class="pill pill-heel">Heel</span>
+        </div>
+      </div>
+      <div style="height:12px;"></div>
+      <button onclick="closeModal('pickerMain')"
+        onmouseover="this.style.background='#d0021b';this.style.color='#fff';this.style.borderColor='#d0021b';"
+        onmouseout="this.style.background='#ffffff';this.style.color='#111';this.style.borderColor='#ffffff';"
+        style="display:block;width:100%;padding:13px;border-radius:10px;border:2px solid #ffffff;background:#ffffff;color:#111;font-size:14px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:'Barlow Condensed',sans-serif;">
+        Confirm Selection
+      </button>
+    </div>
+  </div>
+
+</div><!-- end .phone -->
+
+<script>
+let constraintsOpen = true;
+let durVal = 2;
+let promiseCount = 1;
+let unavailCount = 0;
+
+function toggleConstraints(){
+  constraintsOpen = !constraintsOpen;
+  const body = document.getElementById('constraintsBody');
+  const chev = document.getElementById('chevron');
+  body.style.maxHeight = constraintsOpen ? '600px' : '0px';
+  chev.style.transform = constraintsOpen ? 'rotate(0deg)' : 'rotate(-90deg)';
+}
+
+function updateConstraintSummary(){
+  const promises = document.querySelectorAll('#promiseList .promise-chip').length;
+  const unavails = document.querySelectorAll('#unavailList .unavail-row').length;
+  const goalSel = document.getElementById('goalType1');
+  const hasGoal = goalSel && goalSel.value !== 'none';
+  const parts = [];
+  if(hasGoal) parts.push('1 goal active');
+  else parts.push('No goals');
+  parts.push(`${promises} promise${promises!==1?'s':''}`);
+  parts.push(`${unavails} unavailable`);
+  document.getElementById('constraintsSummary').textContent = parts.join(' · ');
+}
+
+function openModal(id, slot){
+  document.getElementById('modal-'+id).classList.add('open');
+}
+
+function closeModal(id){
+  document.getElementById('modal-'+id).classList.remove('open');
+}
+
+function closeModalBg(e, id){
+  if(e.target === document.getElementById('modal-'+id)) closeModal(id);
+}
+
+function addPromise(){
+  const name = document.getElementById('promiseSuperstar').value;
+  const type = document.getElementById('promiseType').value;
+  const chip = document.createElement('div');
+  chip.className = 'promise-chip';
+  chip.innerHTML = `
+    <div>
+      <div style="font-size:12px;font-weight:700;color:#fff;">${name}</div>
+      <div style="font-size:10px;color:rgba(255,255,255,0.4);">${type} · Due Week 3</div>
+    </div>
+    <div onclick="this.closest('.promise-chip').remove();updateConstraintSummary();"
+      style="font-size:14px;color:rgba(255,255,255,0.3);cursor:pointer;margin-left:4px;">×</div>`;
+  document.getElementById('promiseList').appendChild(chip);
+  closeModal('promisePicker');
+  updateConstraintSummary();
+}
+
+function adjDur(d){
+  durVal = Math.max(1, Math.min(12, durVal+d));
+  document.getElementById('durVal').textContent = durVal;
+}
+
+function addUnavail(){
+  const name = document.getElementById('unavailSuperstar').value;
+  const list = document.getElementById('unavailList');
+  const noEl = document.getElementById('noUnavail');
+  if(noEl) noEl.remove();
+  const row = document.createElement('div');
+  row.className = 'unavail-row';
+  row.style.cssText = 'display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:0.5px solid rgba(255,255,255,0.06);';
+  row.innerHTML = `
+    <div style="flex:1;">
+      <div style="font-size:12px;font-weight:600;color:#fff;">${name}</div>
+      <div style="font-size:10px;color:rgba(255,255,255,0.4);">Injured · ${durVal} week${durVal!==1?'s':''}</div>
+    </div>
+    <div onclick="this.closest('.unavail-row').remove();updateConstraintSummary();"
+      style="font-size:18px;color:rgba(255,77,77,0.6);cursor:pointer;">×</div>`;
+  list.appendChild(row);
+  closeModal('unavailPicker');
+  updateConstraintSummary();
+}
+
+function resetSuggestions(){
+  // Visual feedback only in wireframe
+  const area = document.getElementById('mainArea');
+  area.style.opacity = '0.5';
+  setTimeout(()=>{ area.style.opacity='1'; }, 400);
+}
+
+function updateGoalPicker(n){
+  const sel = document.getElementById('goalType'+n);
+  const picker = document.getElementById('goalPicker'+n);
+  if(!sel||!picker) return;
+  const val = sel.value;
+  if(val==='facevsheeel'){
+    picker.style.display='flex';
+    picker.innerHTML=`
+      <select class="asel" style="flex:1;"><option>Superstar A (Face)</option><option>Superstar F</option></select>
+      <select class="asel" style="flex:1;"><option>Superstar B (Heel)</option><option>Superstar C</option></select>`;
+  } else if(val==='dontuse'||val==='mainevent'){
+    picker.style.display='block';
+    picker.innerHTML=`<select class="asel"><option>Superstar A</option><option>Superstar B</option><option>Legend X</option></select>`;
+  } else if(val==='matchtype'){
+    picker.style.display='block';
+    picker.innerHTML=`<select class="asel"><option>Standard</option><option>Falls Count Anywhere</option><option>Steel Cage</option><option>Ladder</option><option>Tables</option><option>TLC</option><option>Last Man Standing</option><option>I Quit</option><option>Extreme Rules</option></select>`;
+  } else {
+    picker.style.display='none';
+    picker.innerHTML='';
+  }
+  updateConstraintSummary();
+}
+
+updateConstraintSummary();
+</script>
+</body>
+</html>
