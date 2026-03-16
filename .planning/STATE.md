@@ -6,15 +6,17 @@ See: `.planning/PROJECT.md` (updated 2026-03-16)
 
 **Core value:** The app tells you who to book against who and why — data-driven booking recommendations from a Second Brain that knows your roster.
 **Current milestone:** v1.0 — All Claude deliverables complete
-**Current focus:** Ready to begin Phase 1
+**Current focus:** Phase 2 complete ✅ — ready to begin Phase 3 (Wireframe: Screen 6)
 
 ---
 
 ## Current Phase
 
-**Phase 1 — Roster Data: COMPLETE**
-- Plan 01: Convert CSV to roster.json — DONE (2026-03-16)
-- Stopped at: Completed 01-roster-data-01-PLAN.md
+**Phase 2 — Match Rating Formula: COMPLETE**
+- scripts/match-rating.js — formula calculator (zero dependencies)
+- scripts/match-rating.test.js — 32 tests, all passing (TDD: RED→GREEN)
+- docs/myGMPal_Match_Rating_Formula.md — full formula reference
+- DONE (2026-03-16)
 
 ---
 
@@ -23,7 +25,7 @@ See: `.planning/PROJECT.md` (updated 2026-03-16)
 | Phase | Name | Status |
 |-------|------|--------|
 | 1 | Roster Data | ✅ Complete |
-| 2 | Match Rating Formula | ⏳ Pending |
+| 2 | Match Rating Formula | ✅ Complete |
 | 3 | Wireframe: Screen 6 | ⏳ Pending |
 | 4 | Wireframes: Screens 7–10 | ⏳ Pending |
 | 5 | Wireframes: Screens 11–13 | ⏳ Pending |
@@ -57,7 +59,8 @@ See: `.planning/PROJECT.md` (updated 2026-03-16)
 | Phase | Plan | Duration | Tasks | Files |
 |-------|------|----------|-------|-------|
 | 01-roster-data | 01 | ~15 min | 2/2 | 4 |
+| 02-match-formula | 01 | ~20 min | TDD | 3 |
 
 ---
 *State initialized: 2026-03-16*
-*Last session: 2026-03-16 — Completed 01-roster-data-01-PLAN.md*
+*Last session: 2026-03-16 — Phase 2 complete: match-rating.js + 32-test suite (TDD) + formula reference doc*

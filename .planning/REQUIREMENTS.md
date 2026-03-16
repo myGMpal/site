@@ -17,9 +17,9 @@ These are the Claude-deliverable artifacts for the v1.0 launch milestone.
 
 ### Formula
 
-- [ ] **FORM-01**: Match rating formula documented in full (all inputs, all modifiers, clamping logic, edge cases)
-- [ ] **FORM-02**: JavaScript validation script (`scripts/match-rating.js`) calculates formula correctly for all test cases
-- [ ] **FORM-03**: Test suite covers: minimum rating floor (0.5★), maximum ceiling (5★), all rivalry levels (1–4), all match types, title bonus, class synergy, role matchup combinations
+- [x] **FORM-01**: Match rating formula documented in full (all inputs, all modifiers, clamping logic, edge cases)
+- [x] **FORM-02**: JavaScript validation script (`scripts/match-rating.js`) calculates formula correctly for all test cases
+- [x] **FORM-03**: Test suite covers: minimum rating floor (0.5★), maximum ceiling (5★), all rivalry levels (1–4), all match types, title bonus, class synergy, role matchup combinations
 
 ### Wireframes
 
@@ -93,9 +93,9 @@ Post-launch. Not in current roadmap.
 | DATA-01 | Phase 1 | Complete |
 | DATA-02 | Phase 1 | Complete |
 | DATA-03 | Phase 1 | Complete |
-| FORM-01 | Phase 2 | Pending |
-| FORM-02 | Phase 2 | Pending |
-| FORM-03 | Phase 2 | Pending |
+| FORM-01 | Phase 2 | Complete |
+| FORM-02 | Phase 2 | Complete |
+| FORM-03 | Phase 2 | Complete |
 | WIRE-06 | Phase 3 | Pending |
 | WIRE-07 | Phase 4 | Pending |
 | WIRE-08 | Phase 4 | Pending |
@@ -121,4 +121,4 @@ Post-launch. Not in current roadmap.
 
 ---
 *Requirements defined: 2026-03-16*
-*Last updated: 2026-03-16 — Phase 1 complete: DATA-01/02/03 done, draft_score_base added to DATA-01, DATA-03 formula corrected*
+*Last updated: 2026-03-16 — Phase 2 complete: FORM-01/02/03 done, 32-test suite all passing, formula reference doc written*
