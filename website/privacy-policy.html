@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — myGM Pal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:        #0a0a0f;
+      --surface:   #111118;
+      --border:    #1e1e2e;
+      --accent:    #e8c547;
+      --accent2:   #e05c5c;
+      --text:      #e8e8f0;
+      --muted:     #7a7a9a;
+      --heading:   #ffffff;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      font-size: 16px;
+      line-height: 1.75;
+      min-height: 100vh;
+    }
+
+    /* ── BACKGROUND TEXTURE ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 10%, rgba(232,197,71,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(224,92,92,0.05) 0%, transparent 55%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: relative;
+      z-index: 1;
+      padding: 60px 24px 48px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo-mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--accent);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 18px;
+      color: #0a0a0f;
+    }
+
+    .logo-text {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 20px;
+      color: var(--heading);
+      letter-spacing: -0.02em;
+    }
+
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(32px, 6vw, 52px);
+      color: var(--heading);
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+
+    h1 span {
+      color: var(--accent);
+    }
+
+    .updated-badge {
+      display: inline-block;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 12px;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── LAYOUT ── */
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    /* ── NAV / TOC ── */
+    .toc {
+      margin: 48px 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 12px;
+      padding: 28px 32px;
+    }
+
+    .toc-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    .toc ol {
+      list-style: none;
+      counter-reset: toc;
+      columns: 2;
+      column-gap: 24px;
+    }
+
+    @media (max-width: 560px) {
+      .toc ol { columns: 1; }
+    }
+
+    .toc li {
+      counter-increment: toc;
+      margin-bottom: 8px;
+      font-size: 14px;
+      break-inside: avoid;
+    }
+
+    .toc li::before {
+      content: counter(toc, decimal-leading-zero) ". ";
+      color: var(--accent);
+      font-weight: 500;
+      font-size: 12px;
+    }
+
+    .toc a {
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .toc a:hover { color: var(--accent); }
+
+    /* ── SECTIONS ── */
+    section {
+      margin-top: 56px;
+      scroll-margin-top: 32px;
+    }
+
+    h2 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 22px;
+      color: var(--heading);
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    h2 .section-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      background: var(--accent);
+      color: #0a0a0f;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    h3 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      font-size: 16px;
+      color: var(--heading);
+      margin: 28px 0 10px;
+      letter-spacing: -0.01em;
+    }
+
+    p { margin-bottom: 16px; color: var(--text); }
+
+    p:last-child { margin-bottom: 0; }
+
+    ul, ol {
+      padding-left: 20px;
+      margin-bottom: 16px;
+    }
+
+    li { margin-bottom: 8px; }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(232,197,71,0.3);
+      transition: border-color 0.2s;
+    }
+
+    a:hover { border-color: var(--accent); }
+
+    /* ── CALLOUT BOXES ── */
+    .callout {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin: 24px 0;
+      font-size: 15px;
+    }
+
+    .callout.info {
+      border-left: 3px solid var(--accent);
+    }
+
+    .callout.warning {
+      border-left: 3px solid var(--accent2);
+    }
+
+    .callout-label {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .callout.info .callout-label { color: var(--accent); }
+    .callout.warning .callout-label { color: var(--accent2); }
+
+    /* ── CONTACT CARD ── */
+    .contact-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      margin-top: 24px;
+      text-align: center;
+    }
+
+    .contact-card .email-display {
+      display: inline-block;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 20px;
+      color: var(--accent);
+      margin: 12px 0;
+      letter-spacing: -0.02em;
+    }
+
+    .contact-card p {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 0;
+    }
+
+    /* ── DISCLAIMER ── */
+    .disclaimer-box {
+      background: rgba(232,197,71,0.05);
+      border: 1px solid rgba(232,197,71,0.2);
+      border-radius: 12px;
+      padding: 24px 28px;
+      margin: 24px 0;
+      font-size: 14px;
+      color: var(--muted);
+      font-style: italic;
+      line-height: 1.7;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 40px 24px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    footer strong { color: var(--text); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      header { padding: 40px 20px 36px; }
+      .wrapper { padding: 0 20px 60px; }
+      .toc { padding: 20px; }
+      h2 { font-size: 19px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo-mark">
+      <div class="logo-icon">GM</div>
+      <span class="logo-text">myGM Pal</span>
+    </div>
+    <h1>Privacy <span>Policy</span></h1>
+    <div class="updated-badge">Last updated: March 2026</div>
+  </header>
+
+  <div class="wrapper">
+
+    <!-- INTRO -->
+    <section>
+      <div class="callout info">
+        <div class="callout-label">Plain English Summary</div>
+        <p>myGM Pal is a fan-made planning tool for WWE 2K myGM mode. We do not collect, store, or share your personal information. All data you enter stays on your device. If we ever add advertising in the future, we will update this policy and notify you.</p>
+      </div>
+      <p>This Privacy Policy explains how myGM Pal ("the App", "we", "us", or "our") handles information when you use our mobile application available on Google Play and the Apple App Store. We are committed to protecting your privacy and being transparent about our data practices.</p>
+      <p>By downloading or using myGM Pal, you agree to the practices described in this policy. If you do not agree, please discontinue use of the App.</p>
+    </section>
+
+    <!-- TABLE OF CONTENTS -->
+    <nav class="toc" aria-label="Table of contents">
+      <div class="toc-title">Contents</div>
+      <ol>
+        <li><a href="#s1">About This App</a></li>
+        <li><a href="#s2">Information We Collect</a></li>
+        <li><a href="#s3">How Your Data Is Stored</a></li>
+        <li><a href="#s4">Advertising &amp; Third Parties</a></li>
+        <li><a href="#s5">Children's Privacy</a></li>
+        <li><a href="#s6">Australian Privacy Act</a></li>
+        <li><a href="#s7">GDPR — European Users</a></li>
+        <li><a href="#s8">Your Rights</a></li>
+        <li><a href="#s9">Data Security</a></li>
+        <li><a href="#s10">Changes to This Policy</a></li>
+        <li><a href="#s11">Disclaimer</a></li>
+        <li><a href="#s12">Contact Us</a></li>
+      </ol>
+    </nav>
+
+    <!-- SECTION 1 -->
+    <section id="s1">
+      <h2><span class="section-num">1</span> About This App</h2>
+      <p>myGM Pal is an independent, fan-made companion app designed to help players plan and optimise their experience in WWE 2K myGM mode. The App provides tools including a roster tracker, match rating calculator, rivalry planner, and season planning features.</p>
+      <p>The App is developed and maintained by an individual developer based in Western Australia, Australia. It is not affiliated with, endorsed by, or sponsored by World Wrestling Entertainment, Inc. (WWE), Take-Two Interactive Software, Inc., 2K Games, or Visual Concepts.</p>
+    </section>
+
+    <!-- SECTION 2 -->
+    <section id="s2">
+      <h2><span class="section-num">2</span> Information We Collect</h2>
+
+      <h3>Information you enter directly</h3>
+      <p>The App allows you to manually enter roster information, match data, rivalry details, and season planning notes. This information is entered voluntarily and is stored exclusively on your device. We do not transmit this data to any server, and we cannot access it.</p>
+
+      <h3>Information we do NOT collect</h3>
+      <ul>
+        <li>Your name, email address, or any contact details</li>
+        <li>Your location or GPS data</li>
+        <li>Photos, camera, or microphone data</li>
+        <li>Device contacts or calendar information</li>
+        <li>Browsing history or usage data from other apps</li>
+        <li>Any form of account or login credentials</li>
+      </ul>
+
+      <h3>Automatically collected technical information</h3>
+      <p>The App itself does not automatically collect any analytics or usage data. However, the operating system platforms (Google Play / Apple App Store) may collect crash reports and basic performance data in accordance with their own privacy policies, which are separate from this policy.</p>
+
+      <div class="callout info">
+        <div class="callout-label">Current Status</div>
+        <p>In the current version of myGM Pal (v1.0), no advertising SDKs are integrated and no personal data is collected by the App. If this changes in a future version, this policy will be updated and users will be notified via an in-app notice prior to the update taking effect.</p>
+      </div>
+    </section>
+
+    <!-- SECTION 3 -->
+    <section id="s3">
+      <h2><span class="section-num">3</span> How Your Data Is Stored</h2>
+      <p>All data you enter into myGM Pal — including roster details, rivalry records, match history, and season plans — is stored locally on your device using the device's built-in local storage mechanisms.</p>
+      <ul>
+        <li><strong>Local only:</strong> Your data never leaves your device and is not backed up to any cloud server operated by us.</li>
+        <li><strong>No account required:</strong> You do not need to create an account or provide any personal information to use the App.</li>
+        <li><strong>Deletion:</strong> You can delete all App data at any time by uninstalling the App or using the "Clear all data" option in the App's Settings screen. This permanently removes all locally stored information.</li>
+        <li><strong>Device backups:</strong> If your device's operating system performs automatic backups (e.g. iCloud on iOS or Google Drive backup on Android), App data may be included in those device-level backups, which are governed by Apple's and Google's respective privacy policies.</li>
+      </ul>
+    </section>
+
+    <!-- SECTION 4 -->
+    <section id="s4">
+      <h2><span class="section-num">4</span> Advertising &amp; Third-Party Services</h2>
+
+      <h3>Current version (v1.0)</h3>
+      <p>The current version of myGM Pal contains no third-party advertising SDKs, analytics tools, or tracking frameworks. No data is shared with any third party by the App.</p>
+
+      <h3>Future versions — AdMob disclosure</h3>
+      <p>Future versions of myGM Pal may incorporate Google AdMob to display advertisements. If and when this occurs, the following data practices will apply and this policy will be updated accordingly:</p>
+      <ul>
+        <li>Google AdMob may collect your device's advertising identifier (IDFA on iOS, GAID on Android), IP address, general location derived from IP, device type and operating system, and app usage information for the purpose of serving relevant advertisements.</li>
+        <li>You can opt out of personalised advertising at any time through your device settings: on iOS via <strong>Settings → Privacy → Tracking</strong>; on Android via <strong>Settings → Google → Ads → Delete advertising ID</strong>.</li>
+        <li>Google's data practices are governed by the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a>.</li>
+      </ul>
+
+      <div class="callout warning">
+        <div class="callout-label">Notice</div>
+        <p>We will provide advance notice via an in-app alert before any advertising is introduced. Users will have the opportunity to review the updated policy before the change takes effect.</p>
+      </div>
+
+      <h3>No data selling</h3>
+      <p>We do not sell, rent, trade, or otherwise transfer any user data to third parties for commercial purposes. We have no commercial relationship with WWE, 2K Games, or any wrestling-related entity.</p>
+    </section>
+
+    <!-- SECTION 5 -->
+    <section id="s5">
+      <h2><span class="section-num">5</span> Children's Privacy (COPPA)</h2>
+      <p>myGM Pal is not directed at children under the age of 13. We do not knowingly collect personal information from children under 13 years of age. The App does not contain content specifically designed to attract children.</p>
+      <p>If you are a parent or guardian and believe that your child under 13 has provided personal information through the App, please contact us at <a href="mailto:hello@mygmpal.com">hello@mygmpal.com</a> and we will take steps to delete such information.</p>
+      <p>This App is rated for users aged 13 and above in accordance with age rating guidelines applied on the Google Play Store and Apple App Store.</p>
+    </section>
+
+    <!-- SECTION 6 -->
+    <section id="s6">
+      <h2><span class="section-num">6</span> Australian Privacy Act 1988</h2>
+      <p>As an Australian-based developer, we comply with the Australian Privacy Act 1988 (Cth) and the Australian Privacy Principles (APPs). In the current version of myGM Pal, no personal information as defined by the Privacy Act is collected, held, used, or disclosed by the App.</p>
+      <p>If this changes in a future version, the following principles will apply:</p>
+      <ul>
+        <li>We will only collect personal information that is reasonably necessary for the App's function.</li>
+        <li>We will notify you of the collection and its purpose at or before the time of collection.</li>
+        <li>You will have the right to access and correct any personal information we hold about you.</li>
+        <li>Personal information will not be used for a purpose other than the primary purpose of collection without your consent.</li>
+      </ul>
+      <p>For privacy-related enquiries under Australian law, you may contact the Office of the Australian Information Commissioner (OAIC) at <a href="https://www.oaic.gov.au" target="_blank" rel="noopener">oaic.gov.au</a>.</p>
+    </section>
+
+    <!-- SECTION 7 -->
+    <section id="s7">
+      <h2><span class="section-num">7</span> GDPR — European Users</h2>
+      <p>If you are located in the European Economic Area (EEA), the United Kingdom, or Switzerland, the General Data Protection Regulation (GDPR) or equivalent legislation may apply to your use of this App.</p>
+      <p>In the current version of myGM Pal, we do not process any personal data as defined by the GDPR. No data is collected, transferred, or processed in a way that would trigger GDPR obligations at this time.</p>
+      <p>If future versions of the App introduce data processing (for example, through advertising SDKs), we will:</p>
+      <ul>
+        <li>Identify the lawful basis for processing under Article 6 GDPR</li>
+        <li>Provide clear consent mechanisms where consent is required as the lawful basis</li>
+        <li>Implement a consent management platform (CMP) in line with Google's EU User Consent Policy for any advertising integration</li>
+        <li>Honour all rights of data subjects including the rights of access, rectification, erasure, restriction, portability, and objection</li>
+      </ul>
+      <p>The data controller for the purposes of GDPR is the individual developer of myGM Pal, contactable at <a href="mailto:hello@mygmpal.com">hello@mygmpal.com</a>.</p>
+    </section>
+
+    <!-- SECTION 8 -->
+    <section id="s8">
+      <h2><span class="section-num">8</span> Your Rights</h2>
+      <p>Regardless of your location, you have the following rights in relation to any data associated with your use of myGM Pal:</p>
+      <ul>
+        <li><strong>Right to delete:</strong> You can delete all data stored by the App at any time by using Settings → Clear all data, or by uninstalling the App.</li>
+        <li><strong>Right to know:</strong> You can contact us at any time to ask what data, if any, is associated with your use of the App.</li>
+        <li><strong>Right to opt out of advertising:</strong> When advertising is introduced, you will be able to opt out of personalised ads through your device settings at any time.</li>
+        <li><strong>Right to complain:</strong> You have the right to lodge a complaint with the relevant data protection authority in your jurisdiction.</li>
+      </ul>
+      <p>To exercise any of these rights, contact us at <a href="mailto:hello@mygmpal.com">hello@mygmpal.com</a>. We will respond within 30 days.</p>
+    </section>
+
+    <!-- SECTION 9 -->
+    <section id="s9">
+      <h2><span class="section-num">9</span> Data Security</h2>
+      <p>Because myGM Pal stores all data locally on your device and does not transmit personal data to any server, the primary security of your data is provided by your device's own operating system security features — including device passcodes, biometric authentication, and encrypted storage.</p>
+      <p>We recommend keeping your device's operating system updated and using a device passcode or biometric lock to protect locally stored App data.</p>
+      <p>In the event that a future version of the App introduces any server-side data storage, we will implement industry-standard security measures including TLS encryption in transit and encryption at rest, and will update this policy accordingly.</p>
+    </section>
+
+    <!-- SECTION 10 -->
+    <section id="s10">
+      <h2><span class="section-num">10</span> Changes to This Policy</h2>
+      <p>We may update this Privacy Policy from time to time to reflect changes in the App's features, legal requirements, or best practices. When we make material changes — particularly the introduction of data collection or advertising — we will:</p>
+      <ul>
+        <li>Display an in-app notice before the updated version is released</li>
+        <li>Update the "Last updated" date at the top of this page</li>
+        <li>Post the updated policy at <a href="https://mygmpal.com/privacy">mygmpal.com/privacy</a></li>
+      </ul>
+      <p>Your continued use of the App after a policy update constitutes acceptance of the updated policy. If you do not agree with any changes, you should discontinue use of the App.</p>
+    </section>
+
+    <!-- SECTION 11 -->
+    <section id="s11">
+      <h2><span class="section-num">11</span> Disclaimer</h2>
+      <div class="disclaimer-box">
+        myGM Pal is an independent fan-made tool and is not affiliated with, endorsed by, authorised by, or in any way connected to World Wrestling Entertainment, Inc. (WWE), Take-Two Interactive Software, Inc., 2K Games, or Visual Concepts. All WWE trademarks, service marks, trade names, and logos are the property of their respective owners. This App is provided solely as a planning utility for personal use by fans of WWE 2K video games.
+      </div>
+    </section>
+
+    <!-- SECTION 12 -->
+    <section id="s12">
+      <h2><span class="section-num">12</span> Contact Us</h2>
+      <p>If you have any questions, concerns, or requests regarding this Privacy Policy or your privacy when using myGM Pal, please contact us:</p>
+      <div class="contact-card">
+        <p>Email us at</p>
+        <a href="mailto:hello@mygmpal.com" class="email-display">hello@mygmpal.com</a>
+        <p>We aim to respond to all privacy-related enquiries within 30 days. For urgent matters, please include "Privacy" in your email subject line.</p>
+      </div>
+      <p style="margin-top:24px; font-size:14px; color:var(--muted);">This policy is effective as of March 2026 and applies to all versions of the myGM Pal application available on the Google Play Store and Apple App Store.</p>
+    </section>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p><strong>myGM Pal</strong> &nbsp;·&nbsp; <a href="https://mygmpal.com">mygmpal.com</a> &nbsp;·&nbsp; <a href="mailto:hello@mygmpal.com">hello@mygmpal.com</a></p>
+    <p style="margin-top:8px;">© 2026 myGM Pal. Fan-made. Not affiliated with WWE or 2K Games.</p>
+  </footer>
+
+</body>
+</html>
