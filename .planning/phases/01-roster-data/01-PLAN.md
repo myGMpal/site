@@ -8,6 +8,7 @@ files_modified:
   - data/roster.json
   - scripts/convert-roster.js
   - .planning/REQUIREMENTS.md
+  - .planning/ROADMAP.md
 autonomous: true
 requirements:
   - DATA-01
