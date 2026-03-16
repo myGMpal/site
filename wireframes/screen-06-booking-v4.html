@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Screen 6 — Initial Booking v3</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#1a1a1a; display:flex; flex-direction:column; align-items:center; min-height:100vh; padding:24px 0; font-family:'Barlow Condensed',sans-serif; }
+.screen-label { font-size:11px; letter-spacing:3px; text-transform:uppercase; color:#888; margin-bottom:12px; }
+.phone { width:390px; background:#0a0a0a; border-radius:48px; border:3px solid #2a2a2a; overflow:hidden; box-shadow:0 0 0 1px #111,0 32px 80px rgba(0,0,0,0.8); position:relative; }
+.sbar { height:44px; background:#0a0a0a; display:flex; align-items:center; justify-content:space-between; padding:0 24px; flex-shrink:0; }
+.main-screen { display:flex; flex-direction:column; height:780px; background:#0a0a0a; overflow:hidden; }
+.hdr { padding:12px 24px 10px; display:flex; align-items:center; justify-content:space-between; border-bottom:0.5px solid rgba(255,255,255,0.08); flex-shrink:0; }
+.area { flex:1; overflow-y:auto; scrollbar-width:none; }
+.area::-webkit-scrollbar { display:none; }
+.pill { display:inline-flex; align-items:center; padding:3px 9px; border-radius:20px; font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase; }
+.pill-face { background:rgba(77,255,136,0.15); color:#4dff88; }
+.pill-heel { background:rgba(255,77,77,0.15); color:#ff4d4d; }
+.pill-badge { background:rgba(255,255,255,0.08); color:rgba(255,255,255,0.5); }
+.asel { background:#1e1e1e; border:0.5px solid rgba(255,255,255,0.14); border-radius:8px; padding:8px 12px; color:#fff; font-size:12px; font-family:'Barlow Condensed',sans-serif; -webkit-appearance:none; width:100%; cursor:pointer; }
+/* Constraints */
+.c-hdr { padding:11px 20px; background:#111; border-bottom:0.5px solid rgba(255,255,255,0.07); display:flex; align-items:center; justify-content:space-between; cursor:pointer; flex-shrink:0; }
+.c-body { background:#0d0d0d; border-bottom:0.5px solid rgba(255,255,255,0.07); overflow:hidden; transition:max-height 0.3s ease; }
+.sub-sec { padding:11px 20px; border-bottom:0.5px solid rgba(255,255,255,0.05); }
+.sub-sec:last-child { border-bottom:none; }
+.sub-title { font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.35); margin-bottom:8px; }
+/* Match block = card + inline match type panel stacked */
+.match-block { margin:0 16px 4px; }
+.match-card { background:#1a1a1a; border-radius:12px 12px 0 0; border:0.5px solid rgba(255,255,255,0.07); border-bottom:none; overflow:hidden; }
+.match-card.main-event { border-color:rgba(208,2,27,0.25); }
+.match-card-head { padding:8px 14px; background:#161616; border-bottom:0.5px solid rgba(255,255,255,0.06); display:flex; align-items:center; justify-content:space-between; }
+.match-card.main-event .match-card-head { background:rgba(208,2,27,0.07); }
+.match-card-body { padding:9px 14px; }
+.s-row { display:flex; align-items:center; gap:7px; padding:5px 0; }
+.s-row+.s-row { border-top:0.5px solid rgba(255,255,255,0.05); }
+.s-av { width:28px; height:28px; border-radius:50%; background:#2a2a2a; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:700; color:rgba(255,255,255,0.5); flex-shrink:0; }
+.stars { color:#d0021b; letter-spacing:1px; }
+/* ── MATCH TYPE PANEL ── */
+.mt-panel { background:#141414; border-radius:0 0 12px 12px; border:0.5px solid rgba(255,255,255,0.07); border-top:0.5px solid rgba(255,255,255,0.05); padding:10px 14px; margin-bottom:8px; }
+.mt-row1 { display:flex; gap:7px; margin-bottom:8px; }
+.mt-sel { flex:1; background:#1e1e1e; border:0.5px solid rgba(255,255,255,0.12); border-radius:7px; padding:7px 10px; color:#fff; font-size:11px; font-family:'Barlow Condensed',sans-serif; -webkit-appearance:none; cursor:pointer; }
+.mt-info { background:#0f0f0f; border-radius:7px; padding:7px 10px; margin-bottom:8px; display:flex; gap:10px; align-items:flex-start; }
+.mt-cost { font-size:11px; font-weight:700; color:#ffcc44; white-space:nowrap; flex-shrink:0; }
+.mt-stamina { font-size:10px; color:rgba(255,255,255,0.4); }
+.mt-effect { font-size:10px; color:rgba(255,255,255,0.5); line-height:1.5; }
+/* Modifiers row */
+.mod-row { display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
+.mod-label { font-size:9px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.3); margin-right:2px; }
+.mod-toggle { display:flex; align-items:center; gap:5px; padding:4px 9px; border-radius:5px; background:#1e1e1e; border:0.5px solid rgba(255,255,255,0.1); cursor:pointer; user-select:none; transition:all 0.15s; }
+.mod-toggle.on { background:rgba(208,2,27,0.15); border-color:rgba(208,2,27,0.4); }
+.mod-toggle span { font-size:10px; font-weight:700; color:rgba(255,255,255,0.45); letter-spacing:0.5px; }
+.mod-toggle.on span { color:#fff; }
+.mod-dot { width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,0.2); flex-shrink:0; }
+.mod-toggle.on .mod-dot { background:#d0021b; }
+/* Stamina bar */
+.stam-bar { height:3px; border-radius:2px; flex:1; background:rgba(255,255,255,0.08); overflow:hidden; }
+.stam-fill { height:3px; border-radius:2px; }
+/* Promo card */
+.promo-card { margin:0 16px 10px; background:#131313; border-radius:10px; border:0.5px solid rgba(255,255,255,0.06); overflow:hidden; }
+.promo-head { padding:7px 14px; background:#0f0f0f; border-bottom:0.5px solid rgba(255,255,255,0.05); display:flex; align-items:center; justify-content:space-between; }
+.promo-body { padding:9px 14px; }
+.promo-cost { display:inline-flex; align-items:center; padding:3px 8px; border-radius:4px; background:rgba(255,204,68,0.12); color:#ffcc44; font-size:11px; font-weight:700; }
+.promise-chip { display:inline-flex; align-items:center; gap:6px; background:#1e1e1e; border:0.5px solid rgba(255,255,255,0.1); border-radius:20px; padding:5px 10px 5px 12px; margin:3px; }
+/* Modal */
+.modal-ov { display:none; position:absolute; inset:0; background:rgba(0,0,0,0.85); z-index:50; align-items:flex-end; }
+.modal-ov.open { display:flex; }
+.modal-sh { background:#161616; border-radius:20px 20px 0 0; width:100%; padding:20px; border-top:0.5px solid rgba(255,255,255,0.1); max-height:85%; overflow-y:auto; }
+.modal-hdl { width:40px; height:4px; background:rgba(255,255,255,0.2); border-radius:2px; margin:0 auto 16px; }
+.pk-item { display:flex; align-items:center; gap:10px; padding:10px 12px; background:#1e1e1e; border-radius:10px; margin-bottom:6px; cursor:pointer; border:0.5px solid rgba(255,255,255,0.06); }
+.pk-item:hover,.pk-item.sel { border-color:#d0021b; background:rgba(208,2,27,0.08); }
+</style>
+</head>
+<body>
+<div class="screen-label">Screen 6 v3 — Match Types + Stipulations Inline</div>
+<div class="phone">
+  <div class="sbar">
+    <span style="font-size:13px;font-weight:600;color:#fff;">9:41</span>
+    <span style="font-size:11px;color:#fff;">●●● WiFi 100%</span>
+  </div>
+
+  <div class="main-screen">
+    <div class="hdr">
+      <span style="font-size:13px;color:#d0021b;cursor:pointer;font-weight:600;">‹ Titles</span>
+      <span style="font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:3px;color:#fff;">Week 1 Booking</span>
+      <div style="display:flex;gap:5px;">
+        <span class="pill pill-badge">RAW</span>
+        <span class="pill pill-badge">WEEKLY</span>
+      </div>
+    </div>
+
+    <div class="area">
+
+      <!-- ══ CONSTRAINTS ══ -->
+      <div class="c-hdr" onclick="toggleC()">
+        <div>
+          <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);">Constraints</div>
+          <div id="cSummary" style="font-size:12px;color:rgba(255,255,255,0.55);margin-top:2px;">1 goal active · 1 promise · 0 unavailable</div>
+        </div>
+        <div id="chev" style="font-size:16px;color:rgba(255,255,255,0.3);transition:transform 0.3s;">▼</div>
+      </div>
+      <div class="c-body" id="cBody" style="max-height:600px;">
+        <div class="sub-sec">
+          <div class="sub-title">Commissioner Goal</div>
+          <select class="asel" id="goalSel" onchange="updateGoal()" style="margin-bottom:7px;">
+            <option value="none">No goals this week</option>
+            <option value="fvh" selected>Book [Face] vs [Heel]</option>
+            <option value="dontuse">Don't use [Superstar]</option>
+            <option value="matchtype">Use [Match Type] once</option>
+            <option value="title">Book a title match</option>
+            <option value="me">Book [Superstar] in Main Event</option>
+          </select>
+          <div id="goalPicker" style="display:flex;gap:7px;">
+            <select class="asel" style="flex:1;"><option>Superstar A (Face)</option><option>Legend X (Face)</option></select>
+            <select class="asel" style="flex:1;"><option>Superstar B (Heel)</option><option>Superstar C (Heel)</option></select>
+          </div>
+        </div>
+        <div class="sub-sec">
+          <div class="sub-title">Active Promises</div>
+          <div id="promiseList" style="margin-bottom:8px;">
+            <div class="promise-chip"><div><div style="font-size:12px;font-weight:700;color:#fff;">Legend X</div><div style="font-size:10px;color:rgba(255,255,255,0.4);">Main event · Week 3</div></div><div onclick="this.closest('.promise-chip').remove();" style="font-size:14px;color:rgba(255,255,255,0.3);cursor:pointer;margin-left:4px;">×</div></div>
+          </div>
+          <button onclick="openM('promise')" onmouseover="this.style.background='rgba(208,2,27,0.15)';" onmouseout="this.style.background='transparent';" style="background:transparent;border:0.5px solid rgba(208,2,27,0.4);color:#d0021b;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;font-family:'Barlow Condensed',sans-serif;">+ Add Promise</button>
+        </div>
+        <div class="sub-sec">
+          <div class="sub-title">Roster Availability</div>
+          <div id="unavailList" style="margin-bottom:8px;"><div id="noUnavail" style="font-size:12px;color:rgba(255,255,255,0.25);">All superstars available</div></div>
+          <button onclick="openM('unavail')" onmouseover="this.style.background='rgba(255,255,255,0.08)';" onmouseout="this.style.background='transparent';" style="background:transparent;border:0.5px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.6);border-radius:8px;padding:6px 12px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;font-family:'Barlow Condensed',sans-serif;">Mark Unavailable</button>
+        </div>
+      </div>
+
+      <!-- ══ SHOW CARD HEADER ══ -->
+      <div style="padding:12px 20px 6px;display:flex;align-items:center;justify-content:space-between;">
+        <div>
+          <div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.3);">Show Card</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px;">4 matches · 3 promos · Normal</div>
+        </div>
+        <div style="text-align:right;"><div style="font-size:9px;color:rgba(255,255,255,0.3);letter-spacing:1px;">WEEK</div><div style="font-size:22px;font-weight:800;color:#fff;font-family:'Bebas Neue',sans-serif;line-height:1;">1</div></div>
+      </div>
+
+      <!-- ── OPENER ── -->
+      <div class="match-block">
+        <div class="match-card">
+          <div class="match-card-head">
+            <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.45);">Opener</span></div>
+            <div style="display:flex;align-items:center;gap:5px;"><span class="stars" style="font-size:12px;">★★★</span><span style="font-size:9px;color:rgba(255,255,255,0.3);">predicted</span> <span id="matchcost-opener" style="font-size:10px;font-weight:700;color:#ffcc44;background:rgba(255,204,68,0.1);padding:2px 7px;border-radius:4px;">Standard</span></div>
+          </div>
+          <div class="match-card-body">
+            <div class="s-row"><div class="s-av">SF</div><div style="flex:1;"><div style="font-size:12px;font-weight:700;color:#fff;">Superstar F</div><div style="font-size:9px;color:rgba(255,255,255,0.4);">OVR 83</div></div><span class="pill pill-face" style="font-size:9px;">Face</span><button onclick="openM('picker')" onmouseover="this.style.color='#d0021b';" onmouseout="this.style.color='rgba(255,255,255,0.25)';" style="background:transparent;border:none;color:rgba(255,255,255,0.25);font-size:17px;cursor:pointer;padding:2px;">⇄</button></div>
+            <div style="padding:2px 0 2px 35px;font-size:9px;color:rgba(255,255,255,0.2);letter-spacing:1px;">VS</div>
+            <div class="s-row"><div class="s-av">SE</div><div style="flex:1;"><div style="font-size:12px;font-weight:700;color:#fff;">Superstar E</div><div style="font-size:9px;color:rgba(255,255,255,0.4);">OVR 84</div></div><span class="pill pill-heel" style="font-size:9px;">Heel</span><button onclick="openM('picker')" onmouseover="this.style.color='#d0021b';" onmouseout="this.style.color='rgba(255,255,255,0.25)';" style="background:transparent;border:none;color:rgba(255,255,255,0.25);font-size:17px;cursor:pointer;padding:2px;">⇄</button></div>
+          </div>
+        </div>
+        <!-- Match type panel -->
+        <div class="mt-panel" id="mtp-opener">
+          <div class="mt-row1">
+            <select class="mt-sel" onchange="updateMT('opener',this.value)" id="mts-opener">
+              <option value="normal">Normal / Singles</option>
+              <option value="tag">Tag Team</option>
+              <option value="extreme">Extreme Rules</option>
+              <option value="fca">Falls Count Anywhere</option>
+              <option value="hiac">Hell in a Cell</option>
+              <option value="cage">Steel Cage</option>
+              <option value="ladder">Ladder Match</option>
+              <option value="table">Table Match</option>
+              <option value="tlc">TLC</option>
+              <option value="battle">Battle Royal</option>
+              <option value="3stages">3 Stages of Hell</option>
+              <option value="bloodline">Bloodline Rules</option>
+              <option value="iquit">I Quit</option>
+              <option value="submission">Submission Match</option>
+              <option value="lms">Last Man Standing</option>
+              <option value="nhb">No Holds Barred</option>
+              <option value="ironman">Iron Man Match</option>
+              <option value="inferno">Inferno</option>
+              <option value="dumpster">Dumpster</option>
+              <option value="casket">Casket Match</option>
+              <option value="ambulance">Ambulance Match</option>
+              <option value="gauntlet">Gauntlet / Turmoil</option>
+              <option value="underground">Underground Match</option>
+              <option value="backstage">Backstage Brawl</option>
+              <option value="handicap">Handicap</option>
+              <option value="wargames">WarGames</option>
+            </select>
+            <select class="mt-sel" id="stip-opener" style="flex:0.7;">
+              <option>1v1</option><option>3-Way</option><option>4-Way</option>
+            </select>
+          </div>
+          <!-- Info bar -->
+          <div class="mt-info" id="mti-opener">
+            <div style="flex:1;">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;">
+                <span class="mt-cost" id="mtcost-opener">Standard cost</span>
+                <span style="font-size:9px;color:rgba(255,255,255,0.2);">·</span>
+                <span style="font-size:10px;color:rgba(255,255,255,0.4);">Stamina:</span>
+                <div style="display:flex;align-items:center;gap:4px;flex:1;">
+                  <div class="stam-bar"><div class="stam-fill" id="stam-opener" style="width:30%;background:#4dff88;"></div></div>
+                  <span id="stamtxt-opener" style="font-size:9px;color:#4dff88;white-space:nowrap;">Standard</span>
+                </div>
+              </div>
+              <div class="mt-effect" id="mtfx-opener">Most basic match type — lowest cost option</div>
+            </div>
+          </div>
+          <!-- Modifiers -->
+          <div class="mod-row">
+            <span class="mod-label">Mods:</span>
+            <div class="mod-toggle" onclick="this.classList.toggle('on')"><div class="mod-dot"></div><span>Title</span></div>
+            
+            <div class="mod-toggle" onclick="this.classList.toggle('on')"><div class="mod-dot"></div><span>Run-In</span></div>
+            <div class="mod-toggle" onclick="this.classList.toggle('on')"><div class="mod-dot"></div><span>GM Interference</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Opener Promo -->
+      <div class="promo-card">
+        <div class="promo-head"><div style="display:flex;align-items:center;gap:8px;"><div style="padding:2px 7px;background:rgba(255,255,255,0.06);border-radius:4px;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);">Promo</div><span style="font-size:12px;font-weight:600;color:#fff;">Superstar F</span></div><button onclick="openM('picker')" onmouseover="this.style.color='#d0021b';" onmouseout="this.style.color='rgba(255,255,255,0.3)';" style="background:transparent;border:none;color:rgba(255,255,255,0.3);font-size:17px;cursor:pointer;">⇄</button></div>
+        <div class="promo-body">
+          <select style="width:100%;background:#1e1e1e;border:0.5px solid rgba(255,255,255,0.12);border-radius:8px;padding:7px 10px;color:#fff;font-size:12px;font-family:'Barlow Condensed',sans-serif;-webkit-appearance:none;cursor:pointer;margin-bottom:7px;" onchange="updatePromo(this,'pc1','pe1')">
+            <option value="self">Self-Promo — $2,500</option>
+            <option value="callout">Call-Out — $3,000</option>
+            <option value="tag">Tag Team Call-Out — $3,000</option>
+            <option value="ads">Advertising — Free</option>
+            <option value="charity">Charity — $10,000</option>
+            <option value="role">Role Change — $10,000</option>
+            <option value="class">Class Change — $10,000</option>
+            <option value="training">Training — $5,000</option>
+          </select>
+          <div style="display:flex;align-items:center;gap:8px;"><span class="promo-cost" id="pc1">$2,500</span></div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.4);line-height:1.5;margin-top:5px;" id="pe1">Features 1 superstar — increases or lowers Popularity based on Mic Skill</div>
+        </div>
+      </div>
+
+      <!-- ── MID-CARD 1 ── -->
+      <div class="match-block">
+        <div class="match-card">
+          <div class="match-card-head">
+            <span style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);">Mid-Card</span>
+            <div style="display:flex;align-items:center;gap:5px;"><span class="stars" style="font-size:12px;">★★½</span><span style="font-size:9px;color:rgba(255,255,255,0.3);">predicted</span> <span id="matchcost-mc1" style="font-size:10px;font-weight:700;color:#ffcc44;background:rgba(255,204,68,0.1);padding:2px 7px;border-radius:4px;">Standard</span></div>
+          </div>
+          <div class="match-card-body">
+            <div class="s-row"><div class="s-av">SA</div><div style="flex:1;"><div style="font-size:12px;font-weight:700;color:#fff;">Superstar A</div><div style="font-size:9px;color:rgba(255,255,255,0.4);">OVR 92</div></div><span class="pill pill-face" style="font-size:9px;">Face</span><button onclick="openM('picker')" onmouseover="this.style.color='#d0021b';" onmouseout="this.style.color='rgba(255,255,255,0.25)';" style="background:transparent;border:none;color:rgba(255,255,255,0.25);font-size:17px;cursor:pointer;padding:2px;">⇄</button></div>
+            <div style="padding:2px 0 2px 35px;font-size:9px;color:rgba(255,255,255,0.2);letter-spacing:1px;">VS</div>
+            <div class="s-row"><div class="s-av">SC</div><div style="flex:1;"><div style="font-size:12px;font-weight:700;color:#fff;">Superstar C</div><div style="font-size:9px;color:rgba(255,255,255,0.4);">OVR 87</div></div><span class="pill pill-heel" style="font-size:9px;">Heel</span><button onclick="openM('picker')" onmouseover="this.style.color='#d0021b';" onmouseout="this.style.color='rgba(255,255,255,0.25)';" style="background:transparent;border:none;color:rgba(255,255,255,0.25);font-size:17px;cursor:pointer;padding:2px;">⇄</button></div>
+            <div style="padding:4px 0 2px;display:flex;align-items:center;gap:5px;"><span style="font-size:11px;">⚠️</span><span style="font-size:10px;color:#ffcc44;">Superstar C low morale</span></div>
+          </div>
+        </div>
+        <div class="mt-panel" id="mtp-mc1">
+          <div class="mt-row1">
+            <select class="mt-sel" onchange="updateMT('mc1',this.value)"><option value="normal">Normal / Singles</option><option value="extreme">Extreme Rules</option><option value="cage">Steel Cage</option><option value="ladder">Ladder Match</option><option value="lms">Last Man Standing</option><option value="nhb">No Holds Barred</option><option value="fca">Falls Count Anywhere</option><option value="hiac">Hell in a Cell</option><option value="table">Table Match</option><option value="tlc">TLC</option><option value="3stages">3 Stages of Hell</option><option value="bloodline">Bloodline Rules</option><option value="iquit">I Quit</option><option value="submission">Submission Match</option><option value="ironman">Iron Man Match</option><option value="inferno">Inferno</option><option value="dumpster">Dumpster</option><option value="casket">Casket Match</option><option value="ambulance">Ambulance Match</option><option value="underground">Underground Match</option><option value="backstage">Backstage Brawl</option></select>
+            <select class="mt-sel" style="flex:0.7;"><option>1v1</option><option>3-Way</option></select>
+          </div>
+          <div class="mt-info"><div style="flex:1;"><div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;"><span class="mt-cost" id="mtcost-mc1">Standard cost</span><span style="font-size:9px;color:rgba(255,255,255,0.2);">·</span><span style="font-size:10px;color:rgba(255,255,255,0.4);">Stamina:</span><div style="display:flex;align-items:center;gap:4px;flex:1;"><div class="stam-bar"><div class="stam-fill" id="stam-mc1" style="width:30%;background:#4dff88;"></div></div><span id="stamtxt-mc1" style="font-size:9px;color:#4dff88;white-space:nowrap;">Standard</span></div></div><div class="mt-effect" id="mtfx-mc1">Most basic match type — lowest cost option</div></div></div>
+          <div class="mod-row">
+            <span class="mod-label">Mods:</span>
+            <div class="mod-toggle" onclick="this.classList.toggle('on')"><div class="mod-dot"></div><span>Title</span></div>
+            
+            <div class="mod-toggle" onclick="this.classList.toggle('on')"><div class="mod-dot"></div><span>Run-In</span></div>
+            <div class="mod-toggle" onclick="this.classList.toggle('on')"><div class="mod-dot"></div><span>GM Interference</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mid-Card 1 Promo -->
+      <div class="promo-card">
+        <div class="promo-head"><div style="display:flex;align-items:center;gap:8px;"><div style="padding:2px 7px;background:rgba(255,255,255,0.06);border-radius:4px;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);">Promo</div><span style="font-size:12px;font-weight:600;color:#fff;">Superstar C</span></div><button onclick="openM('picker')" onmouseover="this.style.color='#d0021b';" onmouseout="this.style.color='rgba(255,255,255,0.3)';" style="background:transparent;border:none;color:rgba(255,255,255,0.3);font-size:17px;cursor:pointer;">⇄</button></div>
+        <div class="promo-body">
+          <select style="width:100%;background:#1e1e1e;border:0.5px solid rgba(255,255,255,0.12);border-radius:8px;padding:7px 10px;color:#fff;font-size:12px;font-family:'Barlow Condensed',sans-serif;-webkit-appearance:none;cursor:pointer;margin-bottom:7px;" onchange="updatePromo(this,'pc2','pe2')">
+            <option value="callout" selected>Call-Out — $3,000</option>
+            <option value="self">Self-Promo — $2,500</option>
+            <option value="tag">Tag Team Call-Out — $3,000</option>
+            <option value="ads">Advertising — Free</option>
+            <option value="charity">Charity — $10,000</option>
+            <option value="role">Role Change — $10,000</option>
+            <option value="class">Class Change — $10,000</option>
+            <option value="training">Training — $5,000</option>
+          </select>
+          <div style="display:flex;align-items:center;gap:8px;"><span class="promo-cost" id="pc2">$3,000</span></div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.4);line-height:1.5;margin-top:5px;" id="pe2">Starts a 1v1 rivalry or increases the level of an existing one</div>
+        </div>
+      </div>
+
+      <!-- ── MID-CARD 2 (Women's) ── -->
+      <div class="match-block">
+        <div class="match-card">
+          <div class="match-card-head">
+            <div style="display:flex;align-items:center;gap:7px;"><span style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);">Mid-Card</span><span style="font-size:9px;color:rgba(255,255,255,0.3);">Women's</span></div>
+            <div style="display:flex;align-items:center;gap:5px;"><span class="stars" style="font-size:12px;">★★</span><span style="font-size:9px;color:rgba(255,255,255,0.3);">predicted</span> <span id="matchcost-mc2" style="font-size:10px;font-weight:700;color:#ffcc44;background:rgba(255,204,68,0.1);padding:2px 7px;border-radius:4px;">Standard</span></div>
+          </div>
+          <div class="match-card-body">
+            <div class="s-row"><div class="s-av">SD</div><div style="flex:1;"><div style="font-size:12px;font-weight:700;color:#fff;">Superstar D</div><div style="font-size:9px;color:rgba(255,255,255,0.4);">OVR 85 · Women's</div></div><span class="pill pill-face" style="font-size:9px;">Face</span><button onclick="openM('picker')" onmouseover="this.style.color='#d0021b';" onmouseout="this.style.color='rgba(255,255,255,0.25)';" style="background:transparent;border:none;color:rgba(255,255,255,0.25);font-size:17px;cursor:pointer;padding:2px;">⇄</button></div>
+            <div style="padding:2px 0 2px 35px;font-size:9px;color:rgba(255,255,255,0.2);letter-spacing:1px;">VS</div>
+            <div class="s-row"><div class="s-av">SG</div><div style="flex:1;"><div style="font-size:12px;font-weight:700;color:#fff;">Superstar G</div><div style="font-size:9px;color:rgba(255,255,255,0.4);">OVR 82 · Women's</div></div><span class="pill pill-heel" style="font-size:9px;">Heel</span><button onclick="openM('picker')" onmouseover="this.style.color='#d0021b';" onmouseout="this.style.color='rgba(255,255,255,0.25)';" style="background:transparent;border:none;color:rgba(255,255,255,0.25);font-size:17px;cursor:pointer;padding:2px;">⇄</button></div>
+          </div>
+        </div>
+        <div class="mt-panel">
+          <div class="mt-row1">
+            <select class="mt-sel" onchange="updateMT('mc2',this.value)"><option value="normal">Normal / Singles</option><option value="extreme">Extreme Rules</option><option value="cage">Steel Cage</option><option value="ladder">Ladder Match</option><option value="table">Table Match</option><option value="fca">Falls Count Anywhere</option><option value="lms">Last Man Standing</option><option value="submission">Submission Match</option><option value="nhb">No Holds Barred</option><option value="backstage">Backstage Brawl</option></select>
+            <select class="mt-sel" style="flex:0.7;"><option>1v1</option></select>
+          </div>
+          <div class="mt-info"><div style="flex:1;"><div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;"><span class="mt-cost" id="mtcost-mc2">Standard cost</span><span style="font-size:9px;color:rgba(255,255,255,0.2);">·</span><span style="font-size:10px;color:rgba(255,255,255,0.4);">Stamina:</span><div style="display:flex;align-items:center;gap:4px;flex:1;"><div class="stam-bar"><div class="stam-fill" id="stam-mc2" style="width:30%;background:#4dff88;"></div></div><span id="stamtxt-mc2" style="font-size:9px;color:#4dff88;white-space:nowrap;">Standard</span></div></div><div class="mt-effect" id="mtfx-mc2">Most basic match type — lowest cost option</div></div></div>
+          <div class="mod-row">
+            <span class="mod-label">Mods:</span>
+            <div class="mod-toggle" onclick="this.classList.toggle('on')"><div class="mod-dot"></div><span>Title</span></div>
+            
+            <div class="mod-toggle" onclick="this.classList.toggle('on')"><div class="mod-dot"></div><span>Run-In</span></div>
+            <div class="mod-toggle" onclick="this.classList.toggle('on')"><div class="mod-dot"></div><span>GM Interference</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mid-Card 2 Promo -->
+      <div class="promo-card">
+        <div class="promo-head"><div style="display:flex;align-items:center;gap:8px;"><div style="padding:2px 7px;background:rgba(255,255,255,0.06);border-radius:4px;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);">Promo</div><span style="font-size:12px;font-weight:600;color:#fff;">Superstar D</span></div><button onclick="openM('picker')" onmouseover="this.style.color='#d0021b';" onmouseout="this.style.color='rgba(255,255,255,0.3)';" style="background:transparent;border:none;color:rgba(255,255,255,0.3);font-size:17px;cursor:pointer;">⇄</button></div>
+        <div class="promo-body">
+          <select style="width:100%;background:#1e1e1e;border:0.5px solid rgba(255,255,255,0.12);border-radius:8px;padding:7px 10px;color:#fff;font-size:12px;font-family:'Barlow Condensed',sans-serif;-webkit-appearance:none;cursor:pointer;margin-bottom:7px;" onchange="updatePromo(this,'pc3','pe3')">
+            <option value="self" selected>Self-Promo — $2,500</option>
+            <option value="callout">Call-Out — $3,000</option>
+            <option value="tag">Tag Team Call-Out — $3,000</option>
+            <option value="ads">Advertising — Free</option>
+            <option value="charity">Charity — $10,000</option>
+            <option value="role">Role Change — $10,000</option>
+            <option value="class">Class Change — $10,000</option>
+            <option value="training">Training — $5,000</option>
+          </select>
+          <div style="display:flex;align-items:center;gap:8px;"><span class="promo-cost" id="pc3">$2,500</span></div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.4);line-height:1.5;margin-top:5px;" id="pe3">Features 1 superstar — increases or lowers Popularity based on Mic Skill</div>
+        </div>
+      </div>
+
+      <!-- ── MAIN EVENT ── -->
+      <div class="match-block">
+        <div class="match-card main-event">
+          <div class="match-card-head">
+            <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#d0021b;">Main Event</span><span style="font-size:9px;color:rgba(255,255,255,0.4);">Title Match</span></div>
+            <div style="display:flex;align-items:center;gap:5px;"><span class="stars" style="font-size:12px;">★★★★½</span><span style="font-size:9px;color:rgba(255,255,255,0.3);">predicted</span> <span id="matchcost-me" style="font-size:10px;font-weight:700;color:#ffcc44;background:rgba(255,204,68,0.1);padding:2px 7px;border-radius:4px;">Standard +Title</span></div>
+          </div>
+          <div class="match-card-body">
+            <div class="s-row"><div class="s-av" style="background:rgba(208,2,27,0.2);color:#ff8888;">LX</div><div style="flex:1;"><div style="font-size:12px;font-weight:700;color:#fff;">Legend X</div><div style="font-size:9px;color:rgba(255,255,255,0.4);">OVR 95 · Champion</div></div><span class="pill pill-face" style="font-size:9px;">Face</span><button onclick="openM('picker')" onmouseover="this.style.color='#d0021b';" onmouseout="this.style.color='rgba(255,255,255,0.25)';" style="background:transparent;border:none;color:rgba(255,255,255,0.25);font-size:17px;cursor:pointer;padding:2px;">⇄</button></div>
+            <div style="padding:2px 0 2px 35px;font-size:9px;color:rgba(255,255,255,0.2);letter-spacing:1px;">VS</div>
+            <div class="s-row"><div class="s-av" style="background:rgba(208,2,27,0.2);color:#ff8888;">LY</div><div style="flex:1;"><div style="font-size:12px;font-weight:700;color:#fff;">Legend Y</div><div style="font-size:9px;color:rgba(255,255,255,0.4);">OVR 93</div></div><span class="pill pill-heel" style="font-size:9px;">Heel</span><button onclick="openM('picker')" onmouseover="this.style.color='#d0021b';" onmouseout="this.style.color='rgba(255,255,255,0.25)';" style="background:transparent;border:none;color:rgba(255,255,255,0.25);font-size:17px;cursor:pointer;padding:2px;">⇄</button></div>
+            <div style="padding:4px 0 2px;display:flex;align-items:center;gap:5px;"><span style="font-size:11px;">🎯</span><span style="font-size:10px;color:#4dff88;">Satisfies commissioner goal — Face vs Heel</span></div>
+          </div>
+        </div>
+        <div class="mt-panel" style="border-color:rgba(208,2,27,0.15);">
+          <div class="mt-row1">
+            <select class="mt-sel" onchange="updateMT('me',this.value)"><option value="normal">Normal / Singles</option><option value="hiac">Hell in a Cell</option><option value="cage">Steel Cage</option><option value="ladder">Ladder Match</option><option value="tlc">TLC</option><option value="extreme">Extreme Rules</option><option value="3stages">3 Stages of Hell</option><option value="lms">Last Man Standing</option><option value="iquit">I Quit</option><option value="ironman">Iron Man Match</option><option value="inferno">Inferno</option><option value="casket">Casket Match</option><option value="ambulance">Ambulance Match</option><option value="bloodline">Bloodline Rules</option><option value="nhb">No Holds Barred</option><option value="submission">Submission Match</option><option value="table">Table Match</option><option value="fca">Falls Count Anywhere</option><option value="wargames">WarGames</option><option value="gauntlet">Gauntlet / Turmoil</option></select>
+            <select class="mt-sel" style="flex:0.7;"><option>1v1</option><option>3-Way</option><option>4-Way</option><option>6-Way</option></select>
+          </div>
+          <div class="mt-info" style="background:rgba(208,2,27,0.05);"><div style="flex:1;"><div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;"><span class="mt-cost" id="mtcost-me">Standard cost</span><span style="font-size:9px;color:rgba(255,255,255,0.2);">·</span><span style="font-size:10px;color:rgba(255,255,255,0.4);">Stamina:</span><div style="display:flex;align-items:center;gap:4px;flex:1;"><div class="stam-bar"><div class="stam-fill" id="stam-me" style="width:30%;background:#4dff88;"></div></div><span id="stamtxt-me" style="font-size:9px;color:#4dff88;white-space:nowrap;">Standard</span></div></div><div class="mt-effect" id="mtfx-me">Most basic match type — lowest cost option</div></div></div>
+          <div class="mod-row">
+            <span class="mod-label">Mods:</span>
+            <div class="mod-toggle on" onclick="this.classList.toggle('on')"><div class="mod-dot"></div><span>Title</span></div>
+            
+            <div class="mod-toggle" onclick="this.classList.toggle('on')"><div class="mod-dot"></div><span>Run-In</span></div>
+            <div class="mod-toggle" onclick="this.classList.toggle('on')"><div class="mod-dot"></div><span>GM Interference</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ CONFIRM ══ -->
+      <div style="padding:16px 20px 28px;">
+        <div style="background:#111;border-radius:10px;padding:12px 16px;margin-bottom:14px;border:0.5px solid rgba(255,255,255,0.05);">
+          <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:8px;">Show Cost Summary</div>
+          <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:0.5px solid rgba(255,255,255,0.06);"><span style="font-size:12px;color:rgba(255,255,255,0.5);">Promos (3)</span><span style="font-size:12px;color:#fff;font-weight:600;">$7,500</span></div>
+          <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:0.5px solid rgba(255,255,255,0.06);"><span style="font-size:12px;color:rgba(255,255,255,0.5);">Match costs (4)</span><span style="font-size:12px;color:#fff;font-weight:600;">varies</span></div>
+          <div style="display:flex;justify-content:space-between;padding:6px 0 0;"><span style="font-size:13px;font-weight:700;color:#fff;">Total</span><span style="font-size:13px;font-weight:700;color:#d0021b;">from $7,500</span></div>
+        </div>
+        <button onmouseover="this.style.background='#d0021b';this.style.color='#fff';this.style.borderColor='#d0021b';" onmouseout="this.style.background='#ffffff';this.style.color='#111111';this.style.borderColor='#ffffff';" style="display:block;width:100%;padding:15px;border-radius:10px;border:2px solid #ffffff;background:#ffffff;color:#111111;font-size:14px;font-weight:700;letter-spacing:3px;text-transform:uppercase;cursor:pointer;margin-bottom:12px;font-family:'Barlow Condensed',sans-serif;">Confirm Card →</button>
+        <div style="text-align:center;"><span style="font-size:12px;color:rgba(255,255,255,0.3);cursor:pointer;text-decoration:underline;letter-spacing:1px;">Reset Suggestions</span></div>
+        <div style="margin-top:14px;background:#0d0d0d;border-radius:8px;padding:10px 14px;border:0.5px solid rgba(255,255,255,0.05);"><div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.2);margin-bottom:4px;">Suggestion Logic</div><div style="font-size:10px;color:rgba(255,255,255,0.28);line-height:1.6;">Score = Class Synergy + Role Matchup + OVR proximity. Unavailable superstars excluded. Constraint-satisfying pairs ranked higher. Match costs scale with superstar OVR, Popularity, Stamina, and match type complexity.</div></div>
+      </div>
+
+    </div><!-- end area -->
+
+    <!-- Bottom bar -->
+    <div style="padding:10px 20px 14px;background:#0a0a0a;border-top:0.5px solid rgba(255,255,255,0.08);flex-shrink:0;display:flex;align-items:center;justify-content:space-between;">
+      <div><div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3);">Season</div><div style="font-size:12px;font-weight:600;color:#fff;">RAW Season 1</div></div>
+      <div style="text-align:right;"><div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3);">Budget</div><div style="font-size:14px;font-weight:800;color:#d0021b;font-family:'Barlow Condensed',sans-serif;">$5,540,000</div></div>
+    </div>
+  </div>
+
+  <!-- MODAL: Promise -->
+  <div class="modal-ov" id="modal-promise" onclick="if(event.target===this)closeM('promise')">
+    <div class="modal-sh" onclick="event.stopPropagation()">
+      <div class="modal-hdl"></div>
+      <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:4px;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;">Add Promise</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:14px;">Select superstar and promise type</div>
+      <div style="margin-bottom:10px;"><div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:6px;">Superstar</div><select class="asel" id="pStar"><option>Legend X</option><option>Superstar A</option><option>Superstar B</option><option>Superstar D</option><option>Superstar F</option></select></div>
+      <div style="margin-bottom:10px;"><div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:6px;">Promise Type</div><select class="asel" id="pType"><optgroup label="Match Card"><option>Main event appearance</option><option>Match on show</option><option>PPV/PLE match</option></optgroup><optgroup label="Title"><option>Title match soon</option><option>Defend/challenge at PLE</option></optgroup><optgroup label="Opponent"><option>Face specific rival</option><option>Team with superstar</option></optgroup><optgroup label="Workload"><option>Time off this week</option><option>Avoid brutal match types</option></optgroup></select></div>
+      <div style="margin-bottom:14px;"><div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:6px;">Deadline</div><select class="asel"><option>1 Week</option><option>2 Weeks</option><option selected>3 Weeks</option><option>Next PLE</option></select></div>
+      <button onclick="addPromise()" onmouseover="this.style.background='#d0021b';this.style.color='#fff';this.style.borderColor='#d0021b';" onmouseout="this.style.background='#ffffff';this.style.color='#111';this.style.borderColor='#ffffff';" style="display:block;width:100%;padding:13px;border-radius:10px;border:2px solid #ffffff;background:#ffffff;color:#111;font-size:14px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:'Barlow Condensed',sans-serif;">Add Promise</button>
+    </div>
+  </div>
+
+  <!-- MODAL: Unavail -->
+  <div class="modal-ov" id="modal-unavail" onclick="if(event.target===this)closeM('unavail')">
+    <div class="modal-sh" onclick="event.stopPropagation()">
+      <div class="modal-hdl"></div>
+      <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:14px;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;">Mark Unavailable</div>
+      <div style="margin-bottom:10px;"><div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:6px;">Superstar</div><select class="asel" id="uStar"><option>Superstar B</option><option>Superstar C</option><option>Superstar E</option><option>Superstar H</option></select></div>
+      <div style="margin-bottom:10px;"><div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:6px;">Reason</div><select class="asel"><option>Injured</option><option>Personal Leave</option><option>Suspended</option></select></div>
+      <div style="margin-bottom:14px;"><div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:6px;">Duration (weeks)</div>
+        <div style="display:flex;align-items:center;gap:10px;"><button onclick="adjDur(-1)" style="width:40px;height:40px;background:#1e1e1e;border:0.5px solid rgba(255,255,255,0.2);border-radius:8px;color:#fff;font-size:20px;cursor:pointer;">−</button><div id="durVal" style="flex:1;background:#1e1e1e;border:0.5px solid rgba(255,255,255,0.14);border-radius:8px;padding:9px;color:#d0021b;font-size:16px;font-weight:700;text-align:center;font-family:'Barlow Condensed',sans-serif;">2</div><button onclick="adjDur(1)" style="width:40px;height:40px;background:#1e1e1e;border:0.5px solid rgba(255,255,255,0.2);border-radius:8px;color:#fff;font-size:20px;cursor:pointer;">+</button></div>
+      </div>
+      <button onclick="addUnavail()" onmouseover="this.style.background='#d0021b';this.style.color='#fff';this.style.borderColor='#d0021b';" onmouseout="this.style.background='#ffffff';this.style.color='#111';this.style.borderColor='#ffffff';" style="display:block;width:100%;padding:13px;border-radius:10px;border:2px solid #ffffff;background:#ffffff;color:#111;font-size:14px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:'Barlow Condensed',sans-serif;">Confirm</button>
+    </div>
+  </div>
+
+  <!-- MODAL: Picker -->
+  <div class="modal-ov" id="modal-picker" onclick="if(event.target===this)closeM('picker')">
+    <div class="modal-sh" onclick="event.stopPropagation()">
+      <div class="modal-hdl"></div>
+      <div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:4px;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;">Replace Superstar</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:14px;">Select from available roster</div>
+      <div id="pkList">
+        <div class="pk-item" onclick="this.classList.toggle('sel')"><div style="width:30px;height:30px;border-radius:50%;background:#2a2a2a;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:rgba(255,255,255,0.5);flex-shrink:0;">SA</div><div style="flex:1;"><div style="font-size:13px;font-weight:600;color:#fff;">Superstar A</div><div style="font-size:10px;color:rgba(255,255,255,0.4);">Face · Fighter · OVR 92</div></div><span class="pill pill-face" style="font-size:9px;">Face</span></div>
+        <div class="pk-item" onclick="this.classList.toggle('sel')"><div style="width:30px;height:30px;border-radius:50%;background:#2a2a2a;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:rgba(255,255,255,0.5);flex-shrink:0;">SB</div><div style="flex:1;"><div style="font-size:13px;font-weight:600;color:#fff;">Superstar B</div><div style="font-size:10px;color:rgba(255,255,255,0.4);">Heel · Giant · OVR 89</div></div><span class="pill pill-heel" style="font-size:9px;">Heel</span></div>
+        <div class="pk-item" onclick="this.classList.toggle('sel')"><div style="width:30px;height:30px;border-radius:50%;background:#2a2a2a;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:rgba(255,255,255,0.5);flex-shrink:0;">SH</div><div style="flex:1;"><div style="font-size:13px;font-weight:600;color:#fff;">Superstar H</div><div style="font-size:10px;color:rgba(255,255,255,0.4);">Face · Giant · OVR 81</div></div><span class="pill pill-face" style="font-size:9px;">Face</span></div>
+        <div class="pk-item" onclick="this.classList.toggle('sel')"><div style="width:30px;height:30px;border-radius:50%;background:#2a2a2a;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:rgba(255,255,255,0.5);flex-shrink:0;">SJ</div><div style="flex:1;"><div style="font-size:13px;font-weight:600;color:#fff;">Superstar J</div><div style="font-size:10px;color:rgba(255,255,255,0.4);">Face · Bruiser · OVR 79</div></div><span class="pill pill-face" style="font-size:9px;">Face</span></div>
+      </div>
+      <div style="height:10px;"></div>
+      <button onclick="closeM('picker')" onmouseover="this.style.background='#d0021b';this.style.color='#fff';this.style.borderColor='#d0021b';" onmouseout="this.style.background='#ffffff';this.style.color='#111';this.style.borderColor='#ffffff';" style="display:block;width:100%;padding:13px;border-radius:10px;border:2px solid #ffffff;background:#ffffff;color:#111;font-size:14px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:'Barlow Condensed',sans-serif;">Confirm Selection</button>
+    </div>
+  </div>
+
+</div><!-- end phone -->
+
+<script>
+// ── MATCH TYPE DATA ──────────────────────────────────────────────────────────
+const MT = {
+  normal:      { cost:'Standard',      stam:30,  stamCol:'#4dff88', stamTxt:'Standard',  fx:'Most basic match type — lowest cost option' },
+  tag:         { cost:'Standard+',     stam:40,  stamCol:'#4dff88', stamTxt:'Standard–High', fx:'Supports intergender — team formats new in 2K26' },
+  handicap:    { cost:'Moderate',      stam:40,  stamCol:'#4dff88', stamTxt:'Moderate',  fx:'1v2, 1v3, 1v4, 2v3 — new formats in 2K26' },
+  extreme:     { cost:'Higher',        stam:55,  stamCol:'#ffcc44', stamTxt:'High',       fx:'Better show rating — increased cost' },
+  fca:         { cost:'Moderate–High', stam:55,  stamCol:'#ffcc44', stamTxt:'Moderate–High', fx:'Can occur anywhere in the venue' },
+  hiac:        { cost:'High',          stam:65,  stamCol:'#ffcc44', stamTxt:'High',       fx:'Premium stipulation — strong rating boost' },
+  cage:        { cost:'High',          stam:65,  stamCol:'#ffcc44', stamTxt:'High',       fx:'+50% chance to increase rivalry level — immediately resolves rivalry after match' },
+  ladder:      { cost:'High',          stam:75,  stamCol:'#ff4d4d', stamTxt:'Very High',  fx:'New to MyGM in 2K26' },
+  table:       { cost:'Moderate–High', stam:65,  stamCol:'#ffcc44', stamTxt:'High',       fx:'1v1 up to 3v3' },
+  tlc:         { cost:'Very High',     stam:80,  stamCol:'#ff4d4d', stamTxt:'Very High',  fx:'Combines Tables, Ladders, and Chairs' },
+  chamber:     { cost:'Very High',     stam:80,  stamCol:'#ff4d4d', stamTxt:'Very High',  fx:'PLE EXCLUSIVE — losers injured for 3 weeks' },
+  battle:      { cost:'Moderate',      stam:45,  stamCol:'#4dff88', stamTxt:'Moderate',  fx:'Multi-person — new to MyGM in 2K26' },
+  '3stages':   { cost:'$55,000',       stam:90,  stamCol:'#ff4d4d', stamTxt:'Extreme',   fx:'New in 2K26 — quality boost maximum; very high XP gain' },
+  wargames:    { cost:'Very High',     stam:80,  stamCol:'#ff4d4d', stamTxt:'Very High',  fx:'Team-based cage warfare' },
+  bloodline:   { cost:'Moderate–High', stam:65,  stamCol:'#ffcc44', stamTxt:'High',       fx:'New to MyGM in 2K26' },
+  iquit:       { cost:'High',          stam:80,  stamCol:'#ff4d4d', stamTxt:'Very High',  fx:'New to MyGM in 2K26' },
+  submission:  { cost:'Moderate',      stam:50,  stamCol:'#4dff88', stamTxt:'Moderate–High', fx:'Victory by submission only' },
+  lms:         { cost:'High',          stam:80,  stamCol:'#ff4d4d', stamTxt:'Very High',  fx:'10-count knockout required' },
+  nhb:         { cost:'High',          stam:65,  stamCol:'#ffcc44', stamTxt:'High',       fx:'No disqualifications' },
+  ironman:     { cost:'Very High',     stam:90,  stamCol:'#ff4d4d', stamTxt:'Extreme',   fx:'Timed match — most falls wins' },
+  inferno:     { cost:'Very High',     stam:90,  stamCol:'#ff4d4d', stamTxt:'Extreme',   fx:'New to MyGM in 2K26' },
+  dumpster:    { cost:'High',          stam:65,  stamCol:'#ffcc44', stamTxt:'High',       fx:'New to MyGM in 2K26' },
+  casket:      { cost:'Very High',     stam:90,  stamCol:'#ff4d4d', stamTxt:'Extreme',   fx:'Must place opponent in casket' },
+  ambulance:   { cost:'Very High',     stam:90,  stamCol:'#ff4d4d', stamTxt:'Extreme',   fx:'Must place opponent in ambulance' },
+  gauntlet:    { cost:'High',          stam:75,  stamCol:'#ff4d4d', stamTxt:'Very High per participant', fx:'Sequential eliminations — spans multiple competitors' },
+  underground: { cost:'Moderate–High', stam:65,  stamCol:'#ffcc44', stamTxt:'High',       fx:'NXT-style raw environment' },
+  backstage:   { cost:'Moderate–High', stam:65,  stamCol:'#ffcc44', stamTxt:'High',       fx:'Power card available — grants fan bonus when used' },
+};
+
+// ── PROMO DATA ────────────────────────────────────────────────────────────────
+const PROMO = {
+  self:     { cost:'$2,500',  fx:'Features 1 superstar — increases or lowers Popularity based on Mic Skill' },
+  callout:  { cost:'$3,000',  fx:'Starts a 1v1 rivalry or increases the level of an existing one' },
+  tag:      { cost:'$3,000',  fx:'Starts a Tag Team rivalry or increases the level of an existing one' },
+  ads:      { cost:'Free',    fx:'Generates extra revenue — risks decreasing Popularity on poor performance' },
+  charity:  { cost:'$10,000', fx:'Generates a small fan bonus and can boost the superstar\'s Popularity' },
+  role:     { cost:'$10,000', fx:'Turns the superstar Face→Heel or Heel→Face' },
+  class:    { cost:'$10,000', fx:'Changes the superstar\'s class to their bonus perk class' },
+  training: { cost:'$5,000',  fx:'Increases the superstar\'s Ring XP' },
+};
+
+// Intergender detection — checks if the two superstars in a match block are different genders
+// In the wireframe we simulate this with a per-slot toggle state
+const INTERGENDER = { opener:false, mc1:false, mc2:true, me:false }; // mc2 is Women's vs Women's = same gender, but demo purposes
+
+function updateMT(slot, val) {
+  const d = MT[val] || MT.normal;
+  const isIG = INTERGENDER[slot] || false;
+
+  // Stamina modifier for intergender (+1 tier)
+  const stamBonus = isIG ? 10 : 0;
+  const stamFinal = Math.min(d.stam + stamBonus, 95);
+  const stamColFinal = stamFinal >= 75 ? '#ff4d4d' : stamFinal >= 50 ? '#ffcc44' : '#4dff88';
+  const stamTxtFinal = stamFinal >= 85 ? 'Extreme' : stamFinal >= 75 ? 'Very High' : stamFinal >= 55 ? 'High' : stamFinal >= 40 ? 'Moderate' : 'Standard';
+
+  // Cost string
+  let costStr = d.cost;
+  if(isIG) costStr += ' +IG';
+
+  // Update panel elements
+  const costEl  = document.getElementById('mtcost-'+slot);
+  const stamEl  = document.getElementById('stam-'+slot);
+  const stamTxt = document.getElementById('stamtxt-'+slot);
+  const fxEl    = document.getElementById('mtfx-'+slot);
+  if(costEl) costEl.textContent = costStr;
+  if(stamEl) { stamEl.style.width = stamFinal+'%'; stamEl.style.background = stamColFinal; }
+  if(stamTxt) { stamTxt.textContent = stamTxtFinal + (isIG?' +IG':''); stamTxt.style.color = stamColFinal; }
+  if(fxEl) {
+    let fx = d.fx;
+    if(isIG) fx += ' · Intergender detected — small additional cost + stamina applied automatically.';
+    fxEl.textContent = fx;
+  }
+
+  // Update the cost badge on the match card header
+  const cardCost = document.getElementById('matchcost-'+slot);
+  if(cardCost) {
+    // Check if Title modifier is active for this slot
+    const modRows = document.querySelectorAll('#mtp-'+slot+' .mod-toggle');
+    let titleOn = false;
+    modRows.forEach(m => { if(m.querySelector('span') && m.querySelector('span').textContent === 'Title' && m.classList.contains('on')) titleOn = true; });
+    let badge = costStr;
+    if(titleOn) badge += ' +Title';
+    if(isIG) badge = badge.replace(' +IG','') + (titleOn?' +Title':'') + ' +IG';
+    cardCost.textContent = badge;
+  }
+}
+
+// Re-run updateMT when Title modifier toggled
+function toggleMod(el, slot) {
+  el.classList.toggle('on');
+  // Re-evaluate cost badge
+  const sel = document.querySelector('#mtp-'+slot+' .mt-sel');
+  if(sel) updateMT(slot, sel.value);
+}
+
+function updatePromo(sel, costId, fxId) {
+  const d = PROMO[sel.value] || PROMO.self;
+  const c = document.getElementById(costId);
+  const f = document.getElementById(fxId);
+  if(c) c.textContent = d.cost;
+  if(f) f.textContent = d.fx;
+}
+
+let cOpen = true, durVal = 2;
+
+function toggleC(){
+  cOpen=!cOpen;
+  document.getElementById('cBody').style.maxHeight=cOpen?'600px':'0px';
+  document.getElementById('chev').style.transform=cOpen?'rotate(0deg)':'rotate(-90deg)';
+}
+
+function openM(id){ document.getElementById('modal-'+id).classList.add('open'); }
+function closeM(id){ document.getElementById('modal-'+id).classList.remove('open'); }
+
+function addPromise(){
+  const name=document.getElementById('pStar').value;
+  const type=document.getElementById('pType').value;
+  const chip=document.createElement('div');
+  chip.className='promise-chip';
+  chip.innerHTML=`<div><div style="font-size:12px;font-weight:700;color:#fff;">${name}</div><div style="font-size:10px;color:rgba(255,255,255,0.4);">${type} · Week 3</div></div><div onclick="this.closest('.promise-chip').remove();" style="font-size:14px;color:rgba(255,255,255,0.3);cursor:pointer;margin-left:4px;">×</div>`;
+  document.getElementById('promiseList').appendChild(chip);
+  closeM('promise');
+}
+
+function adjDur(d){ durVal=Math.max(1,Math.min(12,durVal+d)); document.getElementById('durVal').textContent=durVal; }
+
+function addUnavail(){
+  const name=document.getElementById('uStar').value;
+  const noEl=document.getElementById('noUnavail');
+  if(noEl) noEl.remove();
+  const row=document.createElement('div');
+  row.style.cssText='display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:0.5px solid rgba(255,255,255,0.06);';
+  row.innerHTML=`<div style="flex:1;"><div style="font-size:12px;font-weight:600;color:#fff;">${name}</div><div style="font-size:10px;color:rgba(255,255,255,0.4);">Injured · ${durVal} week${durVal!==1?'s':''}</div></div><div onclick="this.closest('div').remove();" style="font-size:18px;color:rgba(255,77,77,0.5);cursor:pointer;">×</div>`;
+  document.getElementById('unavailList').appendChild(row);
+  closeM('unavail');
+}
+
+function updateGoal(){
+  const val=document.getElementById('goalSel').value;
+  const p=document.getElementById('goalPicker');
+  if(val==='fvh'){ p.style.display='flex'; p.innerHTML=`<select class="asel" style="flex:1;"><option>Superstar A (Face)</option><option>Legend X (Face)</option></select><select class="asel" style="flex:1;"><option>Superstar B (Heel)</option><option>Superstar C (Heel)</option></select>`; }
+  else if(val==='dontuse'||val==='me'){ p.style.display='block'; p.innerHTML=`<select class="asel"><option>Superstar A</option><option>Superstar B</option><option>Legend X</option></select>`; }
+  else if(val==='matchtype'){ p.style.display='block'; p.innerHTML=`<select class="asel"><option>Normal</option><option>Hell in a Cell</option><option>Ladder Match</option><option>Steel Cage</option><option>TLC</option><option>Extreme Rules</option></select>`; }
+  else { p.style.display='none'; p.innerHTML=''; }
+}
+
+// ── INIT ────────────────────────────────────────────────────────────────────
+// Populate cost badges on load
+['opener','mc1','mc2','me'].forEach(slot => {
+  const sel = document.querySelector('[onchange*="updateMT(''+slot+'"]');
+  if(sel) updateMT(slot, sel.value);
+});
+
+// Add intergender auto-indicator to each match block
+// In production this fires when superstars are selected — here we demo mc2 (Women's vs Women's = same gender)
+// and add a helper to show what the IG indicator looks like
+function showIGIndicator(slot, isIG) {
+  const panel = document.getElementById('mtp-'+slot);
+  if(!panel) return;
+  let existing = panel.querySelector('.ig-indicator');
+  if(existing) existing.remove();
+  if(isIG) {
+    const div = document.createElement('div');
+    div.className = 'ig-indicator';
+    div.style.cssText = 'display:flex;align-items:center;gap:6px;padding:6px 0 2px;border-top:0.5px solid rgba(255,255,255,0.05);margin-top:6px;';
+    div.innerHTML = '<span style="font-size:10px;">⚡</span><span style="font-size:10px;color:#ffcc44;font-weight:600;">Intergender match detected — small additional cost + stamina applied automatically</span>';
+    panel.appendChild(div);
+    INTERGENDER[slot] = true;
+  } else {
+    INTERGENDER[slot] = false;
+  }
+  const sel = panel.querySelector('.mt-sel');
+  if(sel) updateMT(slot, sel.value);
+}
+
+// Demo: opener has mixed genders (Male vs Female) — show IG indicator
+// In production this is driven by the actual superstars selected
+showIGIndicator('opener', false);  // Same gender — no indicator
+showIGIndicator('mc1', false);     // Same gender
+showIGIndicator('mc2', false);     // Women's division — same gender
+showIGIndicator('me', false);      // Same gender
+
+// Title modifier already on for main event — init its badge
+updateMT('me', 'normal');
+</script>
+</body>
+</html>
