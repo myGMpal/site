@@ -16,11 +16,16 @@
 
 **Requirements covered:** DATA-01, DATA-02, DATA-03
 
+**Plans:** 1 plan
+
+Plans:
+- [ ] 01-roster-data-01-PLAN.md — Convert CSV to roster.json, add draft_score_base, validate output
+
 **Success criteria:**
 - All 101 superstars present with correct field names
 - OVR 50–100, Popularity 1–100, Promo_Skill 1–5, Stamina 1–100, Morale 1–100
-- Draft_Cost = OVR × 1.8 (+10 for legends), rounded to nearest 100
-- Draft_Score pre-calculated per superstar
+- Draft_Cost = OVR × 1.8 (+10 for legends), rounded to nearest integer
+- draft_score_base pre-calculated per superstar
 - Gender, Class, Role, Category, Brand all populated with valid enum values
 
 ---
