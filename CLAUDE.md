@@ -170,8 +170,10 @@ git push -u origin feature/issue-N-short-name
 
 ### GitHub auth note
 - Git push/pull uses SSH (configured permanently — key tied to myGMpal org)
-- `gh` CLI is authenticated as `Amorris-kwinana` — needs Admin role on myGMpal/site for issue/label/PR creation
+- `gh` CLI is authenticated as `myGMpal` (active) with full admin scopes — PAT stored in Windows Credential Manager + `.claude/github-token` (gitignored)
+- `Amorris-kwinana` remains as an inactive fallback account in `gh` — do NOT use for this project
 - Remote URL: `git@github.com:myGMpal/site.git` (SSH — never change to HTTPS)
+- To switch accounts: `gh auth switch --user myGMpal`
 
 ---
 
