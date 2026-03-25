@@ -132,19 +132,84 @@ Claude Code cannot directly edit Thunkable projects — but can:
 
 ## Git Workflow
 
-Main branch only. Every push to main auto-deploys the website via GitHub Actions.
-The website root is the `/website/` folder — CNAME and HTML files live there.
+**Strategy: GitHub Flow** — short-lived feature branches, PRs to merge back to main.
+Every push to main auto-deploys the website via GitHub Actions.
+The website root is the `/website/` folder.
 
-To deploy a website change:
-```bash
-# Edit website/index.html
-git add website/index.html
-git commit -m "Description of change"
-git push origin main
-# Auto-deploys in ~60 seconds
+### Branch naming convention
 ```
+feature/   → new wireframes, new app screens, new features
+phase/     → GSD phase execution work
+data/      → roster.json or data file updates
+fix/       → bug fixes on live website
+docs/      → documentation-only changes
+chore/     → tooling, CI, .gitignore type work
+```
+
+### Standard feature branch workflow
+```bash
+# Start work
+git checkout -b feature/issue-N-short-name
+
+# Do the work, commit normally
+git add <files>
+git commit -m "feat: description"
+
+# Push and open PR
+git push -u origin feature/issue-N-short-name
+# Click "Create PR" in Claude Desktop Code tab header
+# OR: gh pr create --title "..." --body "Closes #N"
+
+# Merge PR → branch deletes → main auto-deploys
+```
+
+### Exceptions (commit direct to main — low risk, no website impact)
+- GSD phase planning docs (`.planning/` folder)
+- CLAUDE.md updates
+- README updates
+
+### GitHub auth note
+- Git push/pull uses SSH (configured permanently — key tied to myGMpal org)
+- `gh` CLI is authenticated as `Amorris-kwinana` — needs Admin role on myGMpal/site for issue/label/PR creation
+- Remote URL: `git@github.com:myGMpal/site.git` (SSH — never change to HTTPS)
 
 ---
 
-*Last updated: 16 March 2026*
+## Conversation & Branch Strategy
+
+**One conversation = one GitHub Issue.**
+
+Context windows accumulate. Long sessions that cover multiple topics become less reliable.
+Keep each Claude session scoped to a single issue or GSD phase.
+
+### Start ritual (every new conversation)
+1. Open Claude Desktop → Code tab → verify you're on the right branch
+2. Paste the standard handoff: *"Read CLAUDE.md, docs/myGMPal_Master_Plan.md, and docs/myGMPal_Wireframes.md. Then confirm you're up to speed."*
+3. Tell Claude the GitHub Issue number you're working on: *"We're working on Issue #N — [title]"*
+4. Claude creates/switches to the feature branch: `git checkout -b feature/issue-N-short-name`
+
+### End ritual (when the issue is done)
+1. All deliverables committed and pushed to the feature branch
+2. Click "Create PR" in the Claude Desktop Code tab header (it'll be lit up, not greyed)
+3. Merge the PR on GitHub.com → branch auto-deletes
+4. Confirm `main` is clean and deployed
+5. Close the GitHub Issue
+6. Start a new conversation for the next issue
+
+### Conversation cap
+If a session runs past ~30 turns or ~2 hours without completing the issue scope,
+use `/gsd:pause-work` to create a handoff document, then start a fresh conversation.
+
+### Claude Desktop Code tab — what the header widgets mean
+| Widget | Meaning |
+|--------|---------|
+| `main ← main` | On main, tracking origin/main — no feature branch active |
+| `feature/X ← main` | On a feature branch — ready to PR when work is done |
+| `+N -N` (View Diff) | Total lines added/deleted by Claude this session (cumulative, including committed) |
+| Create PR (greyed) | You're on main — switch to a feature branch first |
+| Create PR (active) | You're on a feature branch with commits — click to open a PR |
+
+---
+
+*Last updated: 25 March 2026*
 *Read docs/myGMPal_Master_Plan.md for full project detail*
