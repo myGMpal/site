@@ -1,4 +1,4 @@
-name: Claude Code — General Assistant (@claude)
+name: Claude Code
 
 on:
   issue_comment:
@@ -19,11 +19,11 @@ jobs:
       (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')))
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-      pull-requests: write
-      issues: write
+      contents: read
+      pull-requests: read
+      issues: read
       id-token: write
-      actions: read
+      actions: read # Required for Claude to read CI results on PRs
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -36,25 +36,15 @@ jobs:
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
 
+          # This is an optional setting that allows Claude to read CI results on PRs
           additional_permissions: |
             actions: read
 
-          custom_instructions: |
-            You are a senior developer working on myGM Pal — a WWE 2K26 myGM mode companion app
-            built by No Sell Studios (solo developer Adam Morris, Perth WA, non-coder).
+          # Optional: Give a custom prompt to Claude. If this is not specified, Claude will perform the instructions specified in the comment that tagged it.
+          # prompt: 'Update the pull request description to include a summary of changes.'
 
-            The app is built in Thunkable (no-code cross-platform Android + iOS). Claude Code generates:
-            - JSON data files (data/roster.json — 101 WWE superstars with draft_score_base etc.)
-            - Standalone Node.js scripts with NO npm dependencies (use built-ins only)
-            - Interactive HTML wireframes with ALL styles hardcoded inline (required for iframe rendering)
-            - Documentation in Markdown
+          # Optional: Add claude_args to customize behavior and configuration
+          # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
+          # or https://code.claude.com/docs/en/cli-reference for available options
+          # claude_args: '--allowed-tools Bash(gh pr:*)'
 
-            Key constraints — never violate these:
-            - Never use CSS classes or <style> blocks in wireframe HTML files (inline only)
-            - Never add npm dependencies to scripts
-            - Keep all logic in plain JS or JSON
-            - Reference docs/myGMPal_Master_Plan.md for game mechanics and requirements
-            - Reference docs/myGMPal_Wireframes.md for locked screen architecture decisions
-
-            GitHub Issues #1–6 are open v1.0 milestone phases. Issue #9 is the living handoff template.
-            Always check open issues before starting work to understand current project state.
