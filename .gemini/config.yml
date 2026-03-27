@@ -1,0 +1,39 @@
+# Gemini Code Assist configuration for myGM Pal
+# See: https://developers.google.com/gemini-code-assist/docs/review-repo-code
+
+code_review:
+  comment_severity_threshold: MEDIUM
+  style_guide: |
+    ## Project: myGM Pal — WWE 2K26 myGM Mode Companion App
+    Studio: No Sell Studios | Developer: Adam Morris (solo, non-coder)
+    Build tool: Thunkable (no-code cross-platform Android + iOS)
+
+    Claude Code generates all deliverables. Gemini reviews should focus on:
+
+    ### JSON data files (data/roster.json)
+    - Schema consistency: every superstar must have all required fields
+    - draft_score_base values must be integers 1–100
+    - brand must be one of: Raw, SmackDown, NXT, Free Agent
+    - No duplicate superstar names
+
+    ### Node.js scripts (scripts/)
+    - No npm dependencies — scripts must use only Node.js built-ins
+    - Scripts are run locally with: node scripts/script-name.js
+    - Output should be human-readable console output or a JSON file
+
+    ### HTML wireframes (wireframes/)
+    - ALL styles must be hardcoded inline (no CSS classes, no <style> blocks)
+    - Reason: iframe rendering strips external CSS
+    - Wireframes are interactive HTML prototypes — preserve all JS interactivity
+    - Do not suggest extracting styles to separate files
+
+    ### Documentation (docs/, CLAUDE.md, README.md)
+    - Markdown only
+    - No broken links
+    - Tables must be properly formatted
+
+    ### What NOT to flag
+    - Inline styles in HTML (this is intentional and required)
+    - Missing package.json (scripts are standalone by design)
+    - Missing TypeScript types (this is plain JS)
+    - Suggestions to use frameworks (Thunkable handles the app layer)

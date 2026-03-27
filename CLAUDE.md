@@ -186,8 +186,8 @@ Keep each Claude session scoped to a single issue or GSD phase.
 
 ### Start ritual (every new conversation)
 1. Open Claude Desktop → Code tab → verify you're on the right branch
-2. Paste the standard handoff: *"Read CLAUDE.md, docs/myGMPal_Master_Plan.md, and docs/myGMPal_Wireframes.md. Then confirm you're up to speed."*
-3. Tell Claude the GitHub Issue number you're working on: *"We're working on Issue #N — [title]"*
+2. Copy the current handoff text from **[Issue #9](https://github.com/myGMpal/site/issues/9)** (the living handoff template — edit that issue to keep it current)
+3. Paste the handoff into Claude, replacing `#N` with the issue number you're working on
 4. Claude creates/switches to the feature branch: `git checkout -b feature/issue-N-short-name`
 
 ### End ritual (when the issue is done)
@@ -213,5 +213,5 @@ use `/gsd:pause-work` to create a handoff document, then start a fresh conversat
 
 ---
 
-*Last updated: 25 March 2026*
+*Last updated: 27 March 2026*
 *Read docs/myGMPal_Master_Plan.md for full project detail*

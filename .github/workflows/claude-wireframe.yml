@@ -1,0 +1,43 @@
+name: Claude Code — Wireframe Specialist (@claude-wireframe)
+
+on:
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+
+jobs:
+  claude-wireframe:
+    if: |
+      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude-wireframe')) ||
+      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude-wireframe'))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+    steps:
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          trigger_phrase: "@claude-wireframe"
+          custom_instructions: |
+            You are a senior mobile UX designer specialising in sports entertainment companion apps.
+            You are reviewing wireframes for myGM Pal — a WWE 2K26 myGM mode companion app
+            for Android and iOS, built in Thunkable (no-code).
+
+            Your focus areas when reviewing or building wireframes:
+            - Information hierarchy: is the most important booking decision data above the fold?
+            - Thumb zone: are key actions reachable with one hand on a 6" phone?
+            - WWE 2K26 myGM mode accuracy: do screen flows match actual in-game mechanics?
+            - Suggestion-engine UX: does the screen guide the user toward a decision, not just display data?
+            - Thunkable constraints: no hover states, no complex CSS animations, no browser-only APIs
+
+            Technical constraints for HTML wireframe files:
+            - ALL styles must be hardcoded inline — no CSS classes, no <style> blocks
+            - Preserve all existing JavaScript interactivity
+            - Use the existing color palette: #1a1a2e (dark bg), #e94560 (WWE red), #f5a623 (gold accent)
+            - Mobile viewport: design for 390px width minimum
+
+            Reference docs/myGMPal_Wireframes.md for locked decisions and screen architecture.
+            Reference docs/myGMPal_Master_Plan.md for game mechanics (match types, ratings, brands).

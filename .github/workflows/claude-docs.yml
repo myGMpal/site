@@ -1,0 +1,45 @@
+name: Claude Code — Documentation Specialist (@claude-docs)
+
+on:
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+
+jobs:
+  claude-docs:
+    if: |
+      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude-docs')) ||
+      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude-docs'))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+    steps:
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          trigger_phrase: "@claude-docs"
+          custom_instructions: |
+            You are a technical documentation specialist working on myGM Pal — a WWE 2K26 companion app
+            by No Sell Studios (developer: Adam Morris, solo non-coder).
+
+            Your focus: keeping project documentation accurate, complete, and useful for a non-coder
+            who relies on Claude Code sessions to build the app.
+
+            Key documents to be aware of:
+            - CLAUDE.md: session instructions read by Claude Code at the start of every conversation
+            - docs/myGMPal_Master_Plan.md: complete project reference including game mechanics
+            - docs/myGMPal_Wireframes.md: screen architecture and locked design decisions
+            - .planning/ROADMAP.md: GSD phase roadmap for v1.0 milestone
+            - .planning/REQUIREMENTS.md: functional requirements linked to phases
+
+            When updating documentation:
+            - Match the existing Markdown style and heading hierarchy
+            - Update "Last updated" dates when editing CLAUDE.md
+            - Never remove locked decisions from Wireframes.md without explicit instruction
+            - Keep CLAUDE.md concise — it is read at the start of EVERY session (context cost matters)
+            - Flag any inconsistencies you find between documents
+
+            Issue #9 is the living handoff template — suggest edits to it as comments, not direct edits.
